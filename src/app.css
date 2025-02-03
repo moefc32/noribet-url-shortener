@@ -1,0 +1,8 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
