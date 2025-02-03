@@ -1,10 +1,13 @@
 <script>
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
-  import { toast } from "svoast";
+  import { Notyf } from "notyf";
   import isValidEmail from "$lib/isValidEmail";
 
   import Login from "$lib/component/Login.svelte";
   import Header from "$lib/component/Header.svelte";
+
+  let notyf;
 
   export let data;
 
@@ -40,7 +43,7 @@
       login.loading = false;
 
       console.error(e);
-      toast.error(
+      notyf.error(
         `${$page.data.is_registered ? "Login" : "Register"} failed, please check all data and try again!`
       );
     }
@@ -59,13 +62,13 @@
       window.location.href = "/";
     } catch (e) {
       console.error(e);
-      toast.error("Logout failed, please try again!");
+      notyf.error("Logout failed, please try again!");
     }
   }
 
   async function reloadURLList() {
     try {
-      const response = await fetch(`/api/env`, {
+      const response = await fetch(`/api/url`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +88,7 @@
     search.loading = true;
 
     try {
-      const response = await fetch(`/api/env?s=${search.keyword}`, {
+      const response = await fetch(`/api/url?s=${search.keyword}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -103,6 +106,10 @@
       console.error(e);
     }
   }
+
+  onMount(async () => {
+    notyf = new Notyf();
+  });
 </script>
 
 <main></main>

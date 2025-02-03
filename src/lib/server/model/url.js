@@ -1,13 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
 import sqlite from '../sqlite';
-import { TABLE_URL } from './tables';
+import { TABLE_URL, TABLE_HISTORY } from './tables';
 
 export default {
     searchData: async (keyword) => {
         try {
             const search = `%${keyword}%`;
 
-            const result = await sqlite(`
+            const result = sqlite(`
                 SELECT * FROM ${TABLE_URL}
                 WHERE LOWER(long_url) LIKE LOWER(?)
                 OR LOWER(short_url) LIKE LOWER(?);
@@ -19,25 +18,57 @@ export default {
             throw new Error('Error when getting data!');
         }
     },
-    getData: async (id) => {
+    getLongURL: async (short_url) => {
         try {
-            const result = !id
+            const timestamp = Date.now();
+
+            const result = sqlite(`
+                SELECT
+                    id,
+                    long_url,
+                    short_url,
+                    timestamp
+                FROM ${TABLE_URL}
+                WHERE short_url = ?;
+            `, [short_url]);
+
+            if (result?.length) sqlite(`
+                    INSERT INTO ${TABLE_HISTORY} (
+                        url_id,
+                        timestamp
+                    ) VALUES (?, ?);
+                `, [result[0].id, timestamp]);
+
+            return result;
+        } catch (e) {
+            console.error(e);
+            throw new Error('Error when getting data!');
+        }
+    },
+    getData: async (short_url) => {
+        try {
+            const result = short_url
                 ? sqlite(`
                     SELECT
-                        id,
-                        long_url
-                    FROM ${TABLE_URL}
-                    ORDER BY timestamp DESC;
-                `)
+                        t.id,
+                        t.long_url,
+                        t.short_url,
+                        t.timestamp,
+                        h.timestamp AS history_timestamp
+                    FROM ${TABLE_URL} t
+                    LEFT JOIN ${TABLE_HISTORY} h
+                    ON t.id = h.url_id
+                    WHERE t.short_url = ?;
+                `, [short_url])
                 : sqlite(`
-                    SELECT
+                    SELECT 
                         id,
                         long_url,
                         short_url,
                         timestamp
                     FROM ${TABLE_URL}
-                    WHERE id = ?;
-                `, [id]);
+                    ORDER BY timestamp DESC;
+                `);
 
             return result;
         } catch (e) {
@@ -48,17 +79,14 @@ export default {
     createData: async (data) => {
         try {
             const timestamp = Date.now();
-            const id = uuidv4();
 
             const result = sqlite(`
                 INSERT INTO ${TABLE_URL} (
-                    id,
                     long_url,
                     short_url,
                     timestamp
-                ) VALUES (?, ?, ?, ?);
+                ) VALUES (?, ?, ?);
             `, [
-                id,
                 data.long_url,
                 data.short_url,
                 timestamp
@@ -66,7 +94,6 @@ export default {
 
             return {
                 column: {
-                    id,
                     long_url: data.long_url,
                     short_url: data.short_url,
                     timestamp,
@@ -80,18 +107,14 @@ export default {
     },
     editData: async (data, id) => {
         try {
-            const timestamp = Date.now();
-
             const result = sqlite(`
                 UPDATE ${TABLE_URL} SET
                     long_url  = COALESCE(?, long_url),
-                    short_url = COALESCE(?, short_url),
-                    timestamp = ?
+                    short_url = COALESCE(?, short_url)
                 WHERE id = ?;
             `, [
                 data.long_url || null,
                 data.short_url || null,
-                timestamp,
                 id
             ]);
 
@@ -100,7 +123,6 @@ export default {
                     id,
                     long_url: data.long_url,
                     short_url: data.short_url,
-                    timestamp,
                 },
                 ...result,
             };

@@ -1,6 +1,6 @@
 <script>
   import "../app.css";
-  import { Toasts } from "svoast";
+  import "notyf/notyf.min.css";
 </script>
 
 <svelte:head>
@@ -10,4 +10,3 @@
 </svelte:head>
 
 <slot />
-<Toasts position={"bottom-center"} />

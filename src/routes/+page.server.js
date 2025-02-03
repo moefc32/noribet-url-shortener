@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { decodeToken } from '$lib/server/token';
 import modelAuth from '$lib/server/model/auth';
-import modelEnv from '$lib/server/model/env';
+import modelURL from '$lib/server/model/url';
 
 export async function load({ cookies, url }) {
     const env = url.searchParams.get('env');
@@ -21,8 +21,8 @@ export async function load({ cookies, url }) {
             .digest("hex")
         : null;
 
-    const all_contents = await modelEnv.getData();
-    const opened_contents = env ? await modelEnv.getData(env) : {};
+    const all_contents = await modelURL.getData();
+    const opened_contents = env ? await modelURL.getData(env) : {};
 
     return {
         access_token,

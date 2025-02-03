@@ -1,9 +1,12 @@
 <script>
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { Menu, ChevronDown, Eye, EyeOff } from "lucide-svelte";
-  import { toast } from "svoast";
+  import { Notyf } from "notyf";
   import isValidEmail from "$lib/isValidEmail";
+
+  let notyf;
 
   export let doLogout;
 
@@ -27,13 +30,17 @@
 
       if (!response.ok) throw new Error();
 
-      toast.success("Profile info updated successfully.");
+      notyf.success("Profile info updated successfully.");
       setTimeout(() => (window.location.href = "/"), 500);
     } catch (e) {
       console.error(e);
-      toast.error("Update profile info failed, please try again!");
+      notyf.error("Update profile info failed, please try again!");
     }
   }
+
+  onMount(async () => {
+    const notyf = new Notyf();
+  });
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->

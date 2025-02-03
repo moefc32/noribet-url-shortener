@@ -1,6 +1,6 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import model from '$lib/server/model/env';
+import model from '$lib/server/model/url';
 import trimText from '$lib/trimText';
 
 export async function GET({ url }) {
