@@ -8,8 +8,8 @@ export default {
 
             const result = sqlite(`
                 SELECT * FROM ${TABLE_URL}
-                WHERE LOWER(long_url) LIKE LOWER(?)
-                OR LOWER(short_url) LIKE LOWER(?);
+                WHERE LOWER(short_url) LIKE LOWER(?)
+                OR LOWER(long_url) LIKE LOWER(?);
             `, [search, search]);
 
             return result;
@@ -18,26 +18,33 @@ export default {
             throw new Error('Error when getting data!');
         }
     },
-    getLongURL: async (short_url) => {
+    getLongURL: async (data) => {
         try {
             const timestamp = Date.now();
 
             const result = sqlite(`
                 SELECT
                     id,
-                    long_url,
-                    short_url,
-                    timestamp
+                    long_url
                 FROM ${TABLE_URL}
                 WHERE short_url = ?;
-            `, [short_url]);
+            `, [data.short_url]);
 
             if (result?.length) sqlite(`
                     INSERT INTO ${TABLE_HISTORY} (
                         url_id,
+                        ref,
+                        agent,
+                        address,
                         timestamp
-                    ) VALUES (?, ?);
-                `, [result[0].id, timestamp]);
+                    ) VALUES (?, ?, ?, ?, ?);
+                `, [
+                result[0].id,
+                data.ref,
+                data.agent,
+                data.address,
+                timestamp
+            ]);
 
             return result;
         } catch (e) {
@@ -51,23 +58,31 @@ export default {
                 ? sqlite(`
                     SELECT
                         t.id,
-                        t.long_url,
                         t.short_url,
+                        t.long_url,
                         t.timestamp,
+                        h.ref,
+                        h.agent,
+                        h.address,
                         h.timestamp AS history_timestamp
                     FROM ${TABLE_URL} t
                     LEFT JOIN ${TABLE_HISTORY} h
                     ON t.id = h.url_id
-                    WHERE t.short_url = ?;
+                    WHERE t.short_url = ?
+                    ORDER BY COALESCE(h.timestamp, 0) DESC;
                 `, [short_url])
                 : sqlite(`
                     SELECT 
-                        id,
-                        long_url,
-                        short_url,
-                        timestamp
-                    FROM ${TABLE_URL}
-                    ORDER BY timestamp DESC;
+                        t.id,
+                        t.short_url,
+                        t.long_url,
+                        COUNT(h.url_id) AS clicks,
+                        t.timestamp
+                    FROM ${TABLE_URL} t
+                    LEFT JOIN ${TABLE_HISTORY} h
+                    ON t.id = h.url_id
+                    GROUP BY t.id
+                    ORDER BY t.timestamp DESC;
                 `);
 
             return result;
@@ -82,20 +97,20 @@ export default {
 
             const result = sqlite(`
                 INSERT INTO ${TABLE_URL} (
-                    long_url,
                     short_url,
+                    long_url,
                     timestamp
                 ) VALUES (?, ?, ?);
             `, [
-                data.long_url,
                 data.short_url,
+                data.long_url,
                 timestamp
             ]);
 
             return {
                 column: {
-                    long_url: data.long_url,
                     short_url: data.short_url,
+                    long_url: data.long_url,
                     timestamp,
                 },
                 ...result,
@@ -109,20 +124,20 @@ export default {
         try {
             const result = sqlite(`
                 UPDATE ${TABLE_URL} SET
-                    long_url  = COALESCE(?, long_url),
-                    short_url = COALESCE(?, short_url)
+                    short_url = COALESCE(?, short_url),
+                    long_url  = COALESCE(?, long_url)
                 WHERE id = ?;
             `, [
-                data.long_url || null,
                 data.short_url || null,
+                data.long_url || null,
                 id
             ]);
 
             return {
                 column: {
                     id,
-                    long_url: data.long_url,
                     short_url: data.short_url,
+                    long_url: data.long_url,
                 },
                 ...result,
             };

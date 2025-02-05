@@ -1,4 +1,4 @@
-export default function datePrettier(timestamp, longDate = true) {
+export default function datePrettier(timestamp) {
     if (!timestamp) return '-';
 
     const date = new Date(parseInt(timestamp));
@@ -8,9 +8,9 @@ export default function datePrettier(timestamp, longDate = true) {
     }
 
     const options = {
-        weekday: longDate ? 'long' : undefined,
+        weekday: 'long',
         day: 'numeric',
-        month: longDate ? 'long' : 'short',
+        month: 'long',
         year: 'numeric',
     };
 

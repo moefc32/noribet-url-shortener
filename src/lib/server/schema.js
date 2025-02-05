@@ -9,14 +9,17 @@ export async function schema() {
         );`,
         `CREATE TABLE IF NOT EXISTS url (
             id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-            long_url TEXT NOT NULL,
             short_url TEXT NOT NULL UNIQUE,
-            timestamp INTEGER NOT NULL DEFAULT (unixepoch())
+            long_url TEXT NOT NULL,
+            timestamp INTEGER NOT NULL
         );`,
         `CREATE TABLE IF NOT EXISTS history (
             id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
             url_id TEXT NOT NULL,
-            timestamp INTEGER NOT NULL DEFAULT (unixepoch()),
+            ref TEXT,
+            agent TEXT,
+            address TEXT,
+            timestamp INTEGER NOT NULL,
             FOREIGN KEY (url_id) REFERENCES url(id) ON DELETE CASCADE
         );`,
     ];

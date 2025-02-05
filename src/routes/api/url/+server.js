@@ -1,22 +1,27 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
+import { randomBytes } from "crypto";
 import model from '$lib/server/model/url';
 import trimText from '$lib/trimText';
 
+function generateShortKey() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    return Array.from(randomBytes(8), (b) => chars[b % chars.length]).join("");
+}
+
 export async function GET({ url }) {
-    const id = url.searchParams.get('id');
     const search = url.searchParams.get('s');
 
     try {
         const result = search
             ? await model.searchData(search)
-            : await model.getData(id);
+            : await model.getData();
 
         return json({
             application: VITE_APP_NAME,
             message: !result.length
                 ? 'No data found.'
-                : `Get ${id ? 'data' : 'all data'} success.`,
+                : `Get all data success.`,
             data: result,
         });
     } catch (e) {
@@ -33,14 +38,23 @@ export async function GET({ url }) {
 
 export async function POST({ request }) {
     const {
-        long_url = '',
         short_url = '',
+        long_url = '',
     } = await request.json() || {};
+
+    if (!long_url) {
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Long URL must be provided!',
+        }, {
+            status: 400,
+        });
+    }
 
     try {
         const result = await model.createData({
-            long_url: trimText(long_url),
-            short_url: trimText(short_url)
+            short_url: short_url ? trimText(short_url) : generateShortKey(),
+            long_url: trimText(long_url)
         });
 
         return json({
@@ -63,14 +77,14 @@ export async function POST({ request }) {
 export async function PATCH({ url, request }) {
     const id = url.searchParams.get('id');
     const {
-        long_url = '',
         short_url = '',
+        long_url = '',
     } = await request.json() || {};
 
     try {
         const result = await model.editData({
-            long_url: trimText(long_url),
-            short_url: trimText(short_url)
+            short_url: trimText(short_url),
+            long_url: trimText(long_url)
         }, id);
 
         return json({

@@ -1,28 +1,28 @@
 <script>
   import { page } from "$app/stores";
   import { Input, ButtonGroup, Button, Spinner } from "flowbite-svelte";
-  import { Eye, EyeOff, LogIn } from "lucide-svelte";
+  import { Eye, EyeOff, Check } from "lucide-svelte";
   import isValidEmail from "$lib/isValidEmail";
 
-  export let login;
-  export let doLogin;
+  export let profile;
+  export let updateProfile;
 
   let showPassword = false;
 
   async function handleKeydown(event) {
-    if (event.key === "Enter" && login.email && login.password) {
-      doLogin();
+    if (event.key === "Enter" && profile.email && profile.password) {
+      updateProfile();
     }
   }
 </script>
 
-<div class="flex flex-col gap-2 dark:text-white">
-  <h1 class="mb-2 text-3xl text-center">{import.meta.env.VITE_APP_NAME}</h1>
+<div class="flex flex-col gap-2">
+  <h1 class="mb-2 text-3xl text-center">Edit Account</h1>
   <Input
     type="email"
     class="input input-bordered dark:bg-gray-800 w-full"
-    placeholder="Email"
-    bind:value={login.email}
+    placeholder="New email"
+    bind:value={profile.email}
     on:keydown={handleKeydown}
   />
   <Input class="input input-bordered flex items-center gap-2 dark:bg-gray-800">
@@ -31,12 +31,12 @@
         <Input
           type="password"
           class="grow dark:bg-gray-800"
-          placeholder="Password"
-          bind:value={login.password}
+          placeholder="New password"
+          bind:value={profile.password}
           on:keydown={handleKeydown}
         />
         <button
-          class="p-3 border-2 border-s-0 dark:border-gray-600 rounded-r-lg"
+          class="flex gap-1 p-3 border-2 border-s-0 dark:border-gray-600 rounded-r-lg"
           title="Click to show password"
           on:click={() => (showPassword = !showPassword)}
         >
@@ -48,12 +48,12 @@
         <Input
           type="text"
           class="grow dark:bg-gray-800"
-          placeholder="Password"
-          bind:value={login.password}
+          placeholder="New password"
+          bind:value={profile.password}
           on:keydown={handleKeydown}
         />
         <button
-          class="p-3 border-2 border-s-0 dark:border-gray-600 rounded-r-lg"
+          class="flex gap-1 p-3 border-2 border-s-0 dark:border-gray-600 rounded-r-lg"
           title="Click to hide password"
           on:click={() => (showPassword = !showPassword)}
         >
@@ -63,19 +63,16 @@
     {/if}
   </Input>
   <Button
-    color="blue"
+    color="green"
     class="flex gap-1 mt-2"
-    title="Login to application"
-    disabled={!login.email ||
-      !isValidEmail(login.email) ||
-      !login.password ||
-      login.loading}
-    on:click={() => doLogin()}
+    disabled={!profile.email || !isValidEmail(profile.email)}
+    on:click={() => updateProfile()}
   >
-    {#if login.loading}
+    {#if profile.loading}
       <Spinner size="3" color="white" /> Loading...
     {:else}
-      <LogIn size={14} /> Login
+      <Check size={14} /> Save
     {/if}
   </Button>
+  <Button class="flex gap-1" color="alternative">Cancel</Button>
 </div>
