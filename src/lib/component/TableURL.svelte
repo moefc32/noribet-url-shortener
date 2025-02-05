@@ -1,5 +1,7 @@
 <script>
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { Notyf } from "notyf";
   import {
     Input,
     Table,
@@ -16,12 +18,20 @@
   import { ChartColumn, Pen, Trash2, CircleAlert, Check } from "lucide-svelte";
   import datePrettier from "$lib/datePrettier";
 
+  let notyf;
+
   export let search;
   export let doSearch;
   export let contents = [];
+  export let reloadURLList = [];
 
   let itemEdit = false;
   let itemDelete = false;
+  let activeEntry;
+  let formData = {
+    short_url: "",
+    long_url: "",
+  };
   let searchTimeout;
 
   async function handleKeydown() {
@@ -32,13 +42,64 @@
     }, 200);
   }
 
-  function openEditModal(id) {
+  function openEditModal(data) {
     itemEdit = true;
+    activeEntry = data.id;
+    formData.short_url = data.short_url;
+    formData.long_url = data.long_url;
   }
 
   function openDeleteModal(id) {
     itemDelete = true;
+    activeEntry = id;
   }
+
+  async function editEntry() {
+    try {
+      const response = await fetch(`/api/url?id=${activeEntry}`, {
+        method: contents.id ? "PATCH" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error();
+
+      notyf.success("Data saved successfully.");
+
+      const result = await response.json();
+      delete contents.is_new;
+
+      await reloadURLList();
+    } catch (e) {
+      console.error(e);
+      notyf.error("Save data failed, please try again!");
+    }
+  }
+
+  async function deleteEntry() {
+    try {
+      const response = await fetch(`/api/url?id=${activeEntry}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error();
+
+      notyf.success("Data deleted successfully.");
+      await reloadURLList();
+    } catch (e) {
+      console.error(e);
+      notyf.error("Delete data failed, please try again!");
+    }
+  }
+
+  onMount(async () => {
+    notyf = new Notyf();
+  });
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
@@ -129,12 +190,12 @@
     <h3 class="mb-5 text-lg text-center">
       Are you sure you want to delete this entry?
     </h3>
-    <Button color="yellow" class="flex gap-1 mt-2 text-black">
-      {#if false}
-        <Spinner size="3" color="white" /> Loading...
-      {:else}
-        <Check size={14} /> Update
-      {/if}
+    <Button
+      color="yellow"
+      class="flex gap-1 mt-2 text-black"
+      on:click={() => editEntry()}
+    >
+      <Check size={14} /> Update
     </Button>
     <Button class="flex gap-1" color="alternative">Cancel</Button>
   </div>
@@ -146,12 +207,8 @@
     <h3 class="mb-5 text-lg text-center">
       Are you sure you want to delete this entry?
     </h3>
-    <Button color="red" class="flex gap-1 mt-2">
-      {#if false}
-        <Spinner size="3" color="white" /> Loading...
-      {:else}
-        <Check size={14} /> Delete
-      {/if}
+    <Button color="red" class="flex gap-1 mt-2" on:click={() => deleteEntry()}>
+      <Check size={14} /> Delete
     </Button>
     <Button class="flex gap-1" color="alternative">Cancel</Button>
   </div>
