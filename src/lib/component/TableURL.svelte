@@ -1,6 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import {
+    Input,
     Table,
     TableBody,
     TableBodyCell,
@@ -8,15 +9,28 @@
     TableHead,
     TableHeadCell,
     Button,
+    Pagination,
+    PaginationItem,
     Modal,
   } from "flowbite-svelte";
   import { ChartColumn, Pen, Trash2, CircleAlert, Check } from "lucide-svelte";
   import datePrettier from "$lib/datePrettier";
 
+  export let search;
+  export let doSearch;
   export let contents = [];
 
   let itemEdit = false;
   let itemDelete = false;
+  let searchTimeout;
+
+  async function handleKeydown() {
+    clearTimeout(searchTimeout);
+
+    searchTimeout = setTimeout(() => {
+      doSearch();
+    }, 200);
+  }
 
   function openEditModal(id) {
     itemEdit = true;
@@ -28,6 +42,14 @@
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
+  <div class="flex px-3 pt-3 w-full md:max-w-80">
+    <Input
+      class="mb-3 dark:bg-gray-800"
+      placeholder="Search..."
+      on:input={handleKeydown}
+      bind:value={search.keyword}
+    />
+  </div>
   <Table striped={true} hoverable={true}>
     <TableHead>
       <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
@@ -44,7 +66,7 @@
           </TableBodyCell>
         </TableBodyRow>
       {/if}
-      {#each contents as item, i}
+      {#each search.keyword ? search.results : contents as item, i}
         <TableBodyRow>
           <TableBodyCell>
             <a href="/{item.short_url}" target="_blank">{item.short_url}</a>
@@ -96,6 +118,9 @@
       {/each}
     </TableBody>
   </Table>
+  <div class="flex p-3 w-full">
+    <Pagination />
+  </div>
 </div>
 
 <Modal size="xs" bind:open={itemEdit} autoclose outsideclose>

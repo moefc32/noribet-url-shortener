@@ -70,7 +70,7 @@
   <Header />
   {#if $page.data.access_token}
     <CreateURL {reloadURLList} />
-    <TableURL {contents} />
+    <TableURL {search} {doSearch} {contents} />
   {:else}
     <div
       class="flex flex-1 flex-col justify-center items-center gap-3 mx-auto pb-12 w-full max-w-screen-md"

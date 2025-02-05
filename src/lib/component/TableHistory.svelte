@@ -7,6 +7,8 @@
     TableHead,
     TableHeadCell,
     Button,
+    Pagination,
+    PaginationItem,
   } from "flowbite-svelte";
   import datePrettier from "$lib/datePrettier";
 
@@ -44,4 +46,7 @@
       {/if}
     </TableBody>
   </Table>
+  <div class="flex p-3 w-full">
+    <Pagination />
+  </div>
 </div>
