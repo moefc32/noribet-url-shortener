@@ -26,7 +26,7 @@
     <TableBody tableBodyClass="divide-y">
       {#if !contents[0].history_timestamp}
         <TableBodyRow>
-          <TableBodyCell colspan="4" class="p-6 text-center text-gray-500">
+          <TableBodyCell colspan="4" class="p-6 text-center !text-gray-400">
             - Currently no data to show -
           </TableBodyCell>
         </TableBodyRow>

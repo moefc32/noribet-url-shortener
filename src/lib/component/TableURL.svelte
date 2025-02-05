@@ -122,7 +122,7 @@
     <TableBody tableBodyClass="divide-y">
       {#if !contents.length}
         <TableBodyRow>
-          <TableBodyCell colspan="5" class="p-6 text-center text-gray-500">
+          <TableBodyCell colspan="5" class="p-6 text-center !text-gray-400">
             - Currently no data to show -
           </TableBodyCell>
         </TableBodyRow>
