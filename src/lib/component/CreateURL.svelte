@@ -66,7 +66,7 @@
 </script>
 
 <div
-  class="card flex flex-col justify-center items-center gap-3 bg-white dark:bg-gray-700 p-3 w-full min-h-[120px] rounded-md shadow-xl"
+  class="card flex flex-col justify-center items-center gap-3 bg-white dark:bg-gray-700 p-3 w-full rounded-md shadow-xl"
 >
   <Input
     class="dark:bg-gray-800"

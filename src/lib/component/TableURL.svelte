@@ -143,7 +143,7 @@
     <TableHead>
       <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
       <TableHeadCell class="whitespace-nowrap">Destination URL</TableHeadCell>
-      <TableHeadCell class="whitespace-nowrap">Clicks</TableHeadCell>
+      <TableHeadCell class="whitespace-nowrap">Total Clicks</TableHeadCell>
       <TableHeadCell class="whitespace-nowrap">Created At</TableHeadCell>
       <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
     </TableHead>
