@@ -30,7 +30,10 @@ export async function load({ cookies, params, request, getClientAddress }) {
         return {
             access_token,
             user_email: isUserPresent?.email,
-            contents: response,
+            contents: {
+                short_url: short_url.replace(/~$/, ""),
+                contents: response,
+            },
         };
     }
 }

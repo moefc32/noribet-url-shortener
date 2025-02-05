@@ -13,6 +13,29 @@
   import datePrettier from "$lib/datePrettier";
 
   export let contents = [];
+  export let reloadHistoryList;
+
+  let currentPage = 1;
+
+  function previous() {
+    const newPage = currentPage - 1 < 1 ? 1 : currentPage - 1;
+
+    if (newPage !== currentPage) {
+      currentPage = newPage;
+      reloadHistoryList(currentPage);
+    }
+  }
+
+  function next() {
+    const newPage = currentPage + 1 > totalPage ? totalPage : currentPage + 1;
+
+    if (newPage !== currentPage) {
+      currentPage = newPage;
+      reloadHistoryList(currentPage);
+    }
+  }
+
+  $: totalPage = Math.max(1, Math.ceil(contents[0].clicks / 10));
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
@@ -47,6 +70,14 @@
     </TableBody>
   </Table>
   <div class="flex p-3 w-full">
-    <Pagination />
+    <Pagination
+      pages={[
+        {
+          name: `${currentPage} of ${totalPage}`,
+        },
+      ]}
+      on:previous={previous}
+      on:next={next}
+    />
   </div>
 </div>

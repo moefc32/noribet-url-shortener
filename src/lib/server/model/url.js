@@ -2,7 +2,7 @@ import sqlite from '../sqlite';
 import { TABLE_URL, TABLE_HISTORY } from './tables';
 
 export default {
-    searchData: async (keyword) => {
+    searchData: async (keyword, limit = 10, offset = 0) => {
         try {
             const search = `%${keyword}%`;
 
@@ -18,9 +18,14 @@ export default {
                     ON t.id = h.url_id
                 WHERE LOWER(short_url) LIKE LOWER(?)
                     OR LOWER(long_url) LIKE LOWER(?)
-                GROUP BY t.id
-                ORDER BY COALESCE(h.timestamp, 0) DESC;
-            `, [search, search]);
+                GROUP BY
+                    t.id,
+                    t.short_url,
+                    t.long_url,
+                    t.timestamp
+                ORDER BY COALESCE(h.timestamp, 0) DESC
+                LIMIT ? OFFSET ?;
+            `, [search, search, limit, offset]);
 
             return result;
         } catch (e) {
@@ -62,7 +67,7 @@ export default {
             throw new Error('Error when getting data!');
         }
     },
-    getData: async (short_url) => {
+    getData: async (short_url, limit = 10, offset = 0) => {
         try {
             const result = short_url
                 ? sqlite(`
@@ -70,6 +75,7 @@ export default {
                         t.id,
                         t.short_url,
                         t.long_url,
+                        COUNT(h.url_id) OVER() AS clicks,
                         t.timestamp,
                         h.ref,
                         h.agent,
@@ -79,10 +85,12 @@ export default {
                     LEFT JOIN ${TABLE_HISTORY} h
                         ON t.id = h.url_id
                     WHERE t.short_url = ?
-                    ORDER BY COALESCE(h.timestamp, 0) DESC;
-                `, [short_url])
+                    ORDER BY COALESCE(h.timestamp, 0) DESC
+                    LIMIT ? OFFSET ?;
+                `, [short_url, limit, offset])
                 : sqlite(`
                     SELECT
+                        COUNT(t.id) OVER() AS urls,
                         t.id,
                         t.short_url,
                         t.long_url,
@@ -91,9 +99,14 @@ export default {
                     FROM ${TABLE_URL} t
                     LEFT JOIN ${TABLE_HISTORY} h
                         ON t.id = h.url_id
-                    GROUP BY t.id
-                    ORDER BY t.timestamp DESC;
-                `);
+                    GROUP BY
+                        t.id,
+                        t.short_url,
+                        t.long_url,
+                        t.timestamp
+                    ORDER BY t.timestamp DESC
+                    LIMIT ? OFFSET ?;
+                `, [limit, offset]);
 
             return result;
         } catch (e) {

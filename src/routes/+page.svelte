@@ -20,9 +20,9 @@
     results: [],
   };
 
-  async function reloadURLList() {
+  async function reloadURLList(page) {
     try {
-      const response = await fetch(`/api/url`, {
+      const response = await fetch(`/api/url?page=${page}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

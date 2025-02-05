@@ -11,12 +11,15 @@ function generateShortKey() {
 }
 
 export async function GET({ url }) {
+    const page = url.searchParams.get('page') || 1;
     const search = url.searchParams.get('s');
+    const short_url = url.searchParams.get('short_url');
 
     try {
+        const offset = (page - 1) * 10;
         const result = search
-            ? await model.searchData(search)
-            : await model.getData();
+            ? await model.searchData(search, 10, offset)
+            : await model.getData(short_url, 10, offset);
 
         return json({
             application: VITE_APP_NAME,

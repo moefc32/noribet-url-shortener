@@ -30,7 +30,7 @@
   export let search;
   export let doSearch;
   export let contents = [];
-  export let reloadURLList = [];
+  export let reloadURLList;
 
   let itemEdit = false;
   let itemDelete = false;
@@ -40,6 +40,25 @@
     long_url: "",
   };
   let searchTimeout;
+  let currentPage = 1;
+
+  function previous() {
+    const newPage = currentPage - 1 < 1 ? 1 : currentPage - 1;
+
+    if (newPage !== currentPage) {
+      currentPage = newPage;
+      reloadURLList(currentPage);
+    }
+  }
+
+  function next() {
+    const newPage = currentPage + 1 > totalPage ? totalPage : currentPage + 1;
+
+    if (newPage !== currentPage) {
+      currentPage = newPage;
+      reloadURLList(currentPage);
+    }
+  }
 
   async function handleKeydown() {
     clearTimeout(searchTimeout);
@@ -107,6 +126,8 @@
   onMount(async () => {
     notyf = new Notyf();
   });
+
+  $: totalPage = Math.max(1, Math.ceil(contents[0].urls / 10));
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
@@ -187,7 +208,15 @@
     </TableBody>
   </Table>
   <div class="flex p-3 w-full">
-    <Pagination />
+    <Pagination
+      pages={[
+        {
+          name: `${currentPage} of ${totalPage}`,
+        },
+      ]}
+      on:previous={previous}
+      on:next={next}
+    />
   </div>
 </div>
 
