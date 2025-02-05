@@ -34,8 +34,8 @@
 
   let itemEdit = false;
   let itemDelete = false;
-  let activeEntry;
   let formData = {
+    id: "",
     short_url: "",
     long_url: "",
   };
@@ -51,20 +51,20 @@
 
   function openEditModal(data) {
     itemEdit = true;
-    activeEntry = data.id;
+    formData.id = data.id;
     formData.short_url = data.short_url;
     formData.long_url = data.long_url;
   }
 
   function openDeleteModal(id) {
     itemDelete = true;
-    activeEntry = id;
+    formData.id = id;
   }
 
   async function editEntry() {
     try {
-      const response = await fetch(`/api/url?id=${activeEntry}`, {
-        method: contents.id ? "PATCH" : "POST",
+      const response = await fetch(`/api/url?id=${formData.id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -87,7 +87,7 @@
 
   async function deleteEntry() {
     try {
-      const response = await fetch(`/api/url?id=${activeEntry}`, {
+      const response = await fetch(`/api/url?id=${formData.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -165,7 +165,7 @@
                 color="yellow"
                 class="flex gap-1 text-black"
                 title="Edit this entry"
-                on:click={() => openEditModal(item.id)}
+                on:click={() => openEditModal(item)}
               >
                 <Pen size={12} />
                 <span class="hidden md:inline">Edit</span>
@@ -194,9 +194,16 @@
 <Modal size="xs" bind:open={itemEdit} autoclose outsideclose>
   <div class="flex flex-col gap-2">
     <Link size={50} class="mx-auto mb-3" />
-    <h3 class="mb-5 text-lg text-center">
-      Are you sure you want to delete this entry?
-    </h3>
+    <Input
+      class="mb-3 dark:bg-gray-800"
+      placeholder="New destination URL"
+      bind:value={formData.long_url}
+    />
+    <Input
+      class="mb-3 dark:bg-gray-800"
+      placeholder="New short URL"
+      bind:value={formData.short_url}
+    />
     <div class="flex gap-1 mt-2">
       <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button>
       <Button
