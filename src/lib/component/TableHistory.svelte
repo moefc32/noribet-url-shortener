@@ -35,7 +35,7 @@
     }
   }
 
-  $: totalPage = Math.max(1, Math.ceil(contents[0].clicks / 10));
+  $: totalPage = Math.max(1, Math.ceil(contents[0]?.clicks / 10));
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">

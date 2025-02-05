@@ -127,7 +127,7 @@
     notyf = new Notyf();
   });
 
-  $: totalPage = Math.max(1, Math.ceil(contents[0].urls / 10));
+  $: totalPage = Math.max(1, Math.ceil(contents[0]?.urls / 10));
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">

@@ -20,7 +20,7 @@
     results: [],
   };
 
-  async function reloadURLList(page) {
+  async function reloadURLList(page = 1) {
     try {
       const response = await fetch(`/api/url?page=${page}`, {
         method: "GET",
