@@ -7,9 +7,19 @@ export default {
             const search = `%${keyword}%`;
 
             const result = sqlite(`
-                SELECT * FROM ${TABLE_URL}
+                SELECT
+                    t.id,
+                    t.short_url,
+                    t.long_url,
+                    COUNT(h.url_id) AS clicks,
+                    t.timestamp
+                FROM ${TABLE_URL} t
+                LEFT JOIN ${TABLE_HISTORY} h
+                    ON t.id = h.url_id
                 WHERE LOWER(short_url) LIKE LOWER(?)
-                OR LOWER(long_url) LIKE LOWER(?);
+                    OR LOWER(long_url) LIKE LOWER(?)
+                GROUP BY t.id
+                ORDER BY COALESCE(h.timestamp, 0) DESC;
             `, [search, search]);
 
             return result;
@@ -67,12 +77,12 @@ export default {
                         h.timestamp AS history_timestamp
                     FROM ${TABLE_URL} t
                     LEFT JOIN ${TABLE_HISTORY} h
-                    ON t.id = h.url_id
+                        ON t.id = h.url_id
                     WHERE t.short_url = ?
                     ORDER BY COALESCE(h.timestamp, 0) DESC;
                 `, [short_url])
                 : sqlite(`
-                    SELECT 
+                    SELECT
                         t.id,
                         t.short_url,
                         t.long_url,
@@ -80,7 +90,7 @@ export default {
                         t.timestamp
                     FROM ${TABLE_URL} t
                     LEFT JOIN ${TABLE_HISTORY} h
-                    ON t.id = h.url_id
+                        ON t.id = h.url_id
                     GROUP BY t.id
                     ORDER BY t.timestamp DESC;
                 `);

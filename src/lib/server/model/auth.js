@@ -5,7 +5,11 @@ export default {
     getData: async (data) => {
         try {
             const result = sqlite(`
-                SELECT * FROM ${TABLE_AUTH}
+                SELECT
+                    id,
+                    email,
+                    password
+                FROM ${TABLE_AUTH}
                 ${data ? 'WHERE id = ? OR email = ?' : ''};
             `, data ? [data, data] : []);
 
