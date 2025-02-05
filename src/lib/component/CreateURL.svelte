@@ -9,6 +9,7 @@
   } from "flowbite-svelte";
   import { Check } from "lucide-svelte";
   import { Notyf } from "notyf";
+  import isValidShortURL from "$lib/isValidShortURL";
 
   let notyf;
 
@@ -69,7 +70,7 @@
 >
   <Input
     class="dark:bg-gray-800"
-    placeholder="Enter long URL"
+    placeholder="Enter destination URL"
     disabled={!siteAddress}
     bind:value={formData.long_url}
     on:keydown={handleKeydown}
@@ -78,7 +79,9 @@
     <Button
       color="green"
       class="flex gap-1 w-48"
-      disabled={!siteAddress || !formData.long_url}
+      disabled={!siteAddress ||
+        !formData.long_url ||
+        !isValidShortURL(formData.short_url)}
       on:click={() => doShorten()}
     >
       {#if formData.loading}
@@ -93,7 +96,7 @@
       </InputAddon>
       <Input
         class="dark:bg-gray-800"
-        placeholder="Enter custom short URL (optional)"
+        placeholder="Enter custom short URL (optional, only alphanumeric)"
         disabled={!siteAddress}
         bind:value={formData.short_url}
         on:keydown={handleKeydown}

@@ -15,7 +15,14 @@
     PaginationItem,
     Modal,
   } from "flowbite-svelte";
-  import { ChartColumn, Pen, Trash2, CircleAlert, Check } from "lucide-svelte";
+  import {
+    ChartColumn,
+    Pen,
+    Trash2,
+    Link,
+    CircleAlert,
+    Check,
+  } from "lucide-svelte";
   import datePrettier from "$lib/datePrettier";
 
   let notyf;
@@ -114,7 +121,7 @@
   <Table striped={true} hoverable={true}>
     <TableHead>
       <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
-      <TableHeadCell class="whitespace-nowrap">Long URL</TableHeadCell>
+      <TableHeadCell class="whitespace-nowrap">Destination URL</TableHeadCell>
       <TableHeadCell class="whitespace-nowrap">Clicks</TableHeadCell>
       <TableHeadCell class="whitespace-nowrap">Created At</TableHeadCell>
       <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
@@ -186,18 +193,20 @@
 
 <Modal size="xs" bind:open={itemEdit} autoclose outsideclose>
   <div class="flex flex-col gap-2">
-    <CircleAlert size={50} class="mx-auto mb-3" />
+    <Link size={50} class="mx-auto mb-3" />
     <h3 class="mb-5 text-lg text-center">
       Are you sure you want to delete this entry?
     </h3>
-    <Button
-      color="yellow"
-      class="flex gap-1 mt-2 text-black"
-      on:click={() => editEntry()}
-    >
-      <Check size={14} /> Update
-    </Button>
-    <Button class="flex gap-1" color="alternative">Cancel</Button>
+    <div class="flex gap-1 mt-2">
+      <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button>
+      <Button
+        color="green"
+        class="flex flex-1 gap-1"
+        on:click={() => editEntry()}
+      >
+        <Check size={14} /> Save
+      </Button>
+    </div>
   </div>
 </Modal>
 
@@ -207,9 +216,15 @@
     <h3 class="mb-5 text-lg text-center">
       Are you sure you want to delete this entry?
     </h3>
-    <Button color="red" class="flex gap-1 mt-2" on:click={() => deleteEntry()}>
-      <Check size={14} /> Delete
-    </Button>
-    <Button class="flex gap-1" color="alternative">Cancel</Button>
+    <div class="flex gap-1 mt-2">
+      <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button>
+      <Button
+        color="red"
+        class="flex flex-1 gap-1"
+        on:click={() => deleteEntry()}
+      >
+        <Trash2 size={14} /> Delete
+      </Button>
+    </div>
   </div>
 </Modal>

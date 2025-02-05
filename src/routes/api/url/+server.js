@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import { randomBytes } from "crypto";
 import model from '$lib/server/model/url';
 import trimText from '$lib/trimText';
+import isValidShortURL from "$lib/isValidShortURL";
 
 function generateShortKey() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -42,10 +43,19 @@ export async function POST({ request }) {
         long_url = '',
     } = await request.json() || {};
 
+    if (!isValidShortURL(short_url)) {
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Invalid short URL!',
+        }, {
+            status: 400,
+        });
+    }
+
     if (!long_url) {
         return json({
             application: VITE_APP_NAME,
-            message: 'Long URL must be provided!',
+            message: 'Destination URL must be provided!',
         }, {
             status: 400,
         });
@@ -80,6 +90,15 @@ export async function PATCH({ url, request }) {
         short_url = '',
         long_url = '',
     } = await request.json() || {};
+
+    if (!isValidShortURL(short_url)) {
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Invalid short URL!',
+        }, {
+            status: 400,
+        });
+    }
 
     try {
         const result = await model.editData({
