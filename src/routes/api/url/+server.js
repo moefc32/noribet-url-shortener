@@ -1,14 +1,9 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import { randomBytes } from "crypto";
+import { init } from "@paralleldrive/cuid2";
 import model from '$lib/server/model/url';
 import trimText from '$lib/trimText';
 import isValidShortURL from "$lib/isValidShortURL";
-
-function generateShortKey() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    return Array.from(randomBytes(8), (b) => chars[b % chars.length]).join("");
-}
 
 export async function GET({ url }) {
     const page = url.searchParams.get('page') || 1;
@@ -66,7 +61,7 @@ export async function POST({ request }) {
 
     try {
         const result = await model.createData({
-            short_url: short_url ? trimText(short_url) : generateShortKey(),
+            short_url: short_url ? trimText(short_url) : init({ length: 8 })(),
             long_url: trimText(long_url)
         });
 

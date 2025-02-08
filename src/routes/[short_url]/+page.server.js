@@ -22,7 +22,8 @@ export async function load({ cookies, params, request, getClientAddress }) {
         const decoded_token = await decodeToken(access_token);
         const isUserPresent = await modelAuth.getData(decoded_token?.id);
 
-        if (!access_token && !isUserPresent) throw redirect(302, '/init');
+        if (!access_token && !isUserPresent)
+            throw redirect(303, '/init');
         if (!access_token) throw error(404, 'Not Found');
 
         const response = await modelURL.getData(short_url.replace(/~$/, ''));

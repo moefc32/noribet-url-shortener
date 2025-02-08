@@ -8,7 +8,8 @@ export async function load({ cookies }) {
     const decoded_token = await decodeToken(access_token);
     const isUserPresent = await modelAuth.getData(decoded_token?.id);
 
-    if (!decoded_token && !isUserPresent) throw redirect(302, '/init');
+    if (!decoded_token && !isUserPresent)
+        throw redirect(303, '/init');
     if (!access_token) return;
 
     const response = await modelURL.getData();

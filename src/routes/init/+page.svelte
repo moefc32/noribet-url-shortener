@@ -67,7 +67,7 @@
       bind:value={register.email}
       on:keydown={handleKeydown}
     />
-    <Input class="input input-bordered flex items-center gap-2 dark:bg-gray-800">
+    <Input class="input input-bordered flex items-center gap-2 dark:bg-gray-800 w-full">
       {#if !showPassword}
         <ButtonGroup class="w-full">
           <Input
