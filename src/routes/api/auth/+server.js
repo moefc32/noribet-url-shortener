@@ -9,6 +9,7 @@ import { decodeToken } from '$lib/server/token';
 import jwt from 'jsonwebtoken';
 import model from '$lib/server/model/auth';
 import isValidEmail from "$lib/isValidEmail";
+import parseMs from '$lib/parseMs';
 
 export async function POST({ cookies, request }) {
     const {
@@ -47,8 +48,7 @@ export async function POST({ cookies, request }) {
             expiresIn: VITE_JWT_EXPIRATION ?? '1h',
         });
 
-        const hours = parseInt(VITE_JWT_EXPIRATION) || 1;
-        const maxAge = hours * 60 * 60;
+        const maxAge = parseMs(VITE_JWT_EXPIRATION ?? '1h');
         cookies.set('access_token', token, {
             path: '/',
             httpOnly: true,
