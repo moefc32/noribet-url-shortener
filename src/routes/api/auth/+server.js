@@ -5,7 +5,7 @@ import {
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import { hashPassword, comparePassword } from '$lib/server/hash';
-import { decodeToken } from '$lib/server/token';
+import decodeToken from '$lib/server/token';
 import jwt from 'jsonwebtoken';
 import model from '$lib/server/model/auth';
 import isValidEmail from "$lib/isValidEmail";
@@ -88,7 +88,7 @@ export async function PATCH({ cookies, request }) {
 
     try {
         const access_token = await cookies.get('access_token');
-        const decoded_token = await decodeToken(access_token);
+        const decoded_token = decodeToken(access_token);
         const isUserPresent = await model.getData(decoded_token?.id);
 
         if (!isUserPresent)
