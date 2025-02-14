@@ -1,3 +1,4 @@
+import { TABLE_AUTH } from './model/tables';
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
@@ -39,4 +40,16 @@ export default function sqlite(dataQuery, params = []) {
         console.error(e);
         throw new Error('Database query failed!');
     }
+}
+
+export function checkIsUserExists(userId) {
+    if (!userId) return false;
+
+    const result = sqlite(`
+        SELECT COUNT(id) AS count
+        FROM ${TABLE_AUTH}
+        WHERE id = ?;
+    `, [userId]);
+
+    return result?.[0]?.count > 0;
 }

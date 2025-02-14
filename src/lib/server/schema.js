@@ -1,6 +1,6 @@
 import sqlite from './sqlite';
 
-export async function schema() {
+export default function setSchema() {
     const queries = [`
         CREATE TABLE IF NOT EXISTS auth (
             id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
