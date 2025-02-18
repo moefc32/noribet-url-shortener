@@ -1,7 +1,7 @@
 export default function datePrettier(timestamp) {
     if (!timestamp) return '-';
 
-    const date = new Date(parseInt(timestamp));
+    const date = new Date(parseInt(timestamp, 10));
 
     if (isNaN(date.getTime())) {
         return '-';
