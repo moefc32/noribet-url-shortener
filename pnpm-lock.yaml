@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      '@fontsource/plus-jakarta-sans':
+      '@fontsource-variable/plus-jakarta-sans':
         specifier: ^5.1.1
         version: 5.1.1
       '@paralleldrive/cuid2':
@@ -239,8 +239,8 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
-  '@fontsource/plus-jakarta-sans@5.1.1':
-    resolution: {integrity: sha512-czlD7FGbJqZ+5YVJ1LK3mVh2GIbGQZDQTtsv2leNgJC5lxNQ3dnqPURCNeW+nfPrcMHO94Er4qpklmJM++UHPw==}
+  '@fontsource-variable/plus-jakarta-sans@5.1.1':
+    resolution: {integrity: sha512-89gGj8paLxMnlJWVbsWwTgI3T0VwncJmA2pf3nrOWTJK1RT+mQsE++3+BLTNLo7RpYvtuMbEFrsMsZXwGuL2zg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1712,7 +1712,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@fontsource/plus-jakarta-sans@5.1.1': {}
+  '@fontsource-variable/plus-jakarta-sans@5.1.1': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

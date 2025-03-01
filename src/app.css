@@ -2,7 +2,13 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@import '@fontsource-variable/plus-jakarta-sans';
+
 input::-ms-reveal,
 input::-ms-clear {
     display: none;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans Variable', sans-serif;
 }
