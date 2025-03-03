@@ -52,7 +52,7 @@
                 <TableBodyRow>
                     <TableBodyCell
                         colspan="4"
-                        class="p-6 text-center !text-gray-400"
+                        class="p-6 text-center text-gray-400!"
                     >
                         - Currently no data to show -
                     </TableBodyCell>

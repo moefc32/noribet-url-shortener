@@ -100,11 +100,9 @@
 >
     <div class="flex-1">
         <button
-            class="flex gap-1 px-3 text-2xl font-bold cursor-pointer"
+            class="flex items-center gap-1 ps-12 pe-3 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-[length:40px] text-2xl font-bold h-[40px] cursor-pointer"
             on:click={() => goto('/')}
         >
-            <span class="site-title inline-block w-[40px] h-[40px] rounded-full"
-            ></span>
             {import.meta.env.VITE_APP_NAME}
         </button>
     </div>
@@ -112,7 +110,7 @@
         <Button
             outline
             color="dark"
-            class="flex gap-1"
+            class="flex gap-1 px-4 py-2 cursor-pointer"
             title="Edit login account"
             on:click={() => (modalProfile = true)}
         >
@@ -121,7 +119,7 @@
         </Button>
         <Button
             color="purple"
-            class="flex gap-1"
+            class="flex gap-1 px-4 py-2 cursor-pointer"
             title="Logout from application"
             on:click={() => doLogout()}
         >
@@ -131,7 +129,7 @@
     {:else}
         <Button
             color="blue"
-            class="flex gap-1"
+            class="flex gap-1 px-4 py-2 cursor-pointer"
             title="Login to application"
             on:click={() => (modalLogin = true)}
         >
@@ -148,12 +146,3 @@
 <Modal class="max-w-[320px]" bind:open={modalProfile} autoclose outsideclose>
     <EditAccount {profile} {updateProfile} />
 </Modal>
-
-<style>
-    .site-title {
-        background:
-            url(./favicon.svg) center center no-repeat,
-            #55aaff;
-        background-size: 25px;
-    }
-</style>

@@ -156,7 +156,7 @@
                 <TableBodyRow>
                     <TableBodyCell
                         colspan="5"
-                        class="p-6 text-center !text-gray-400"
+                        class="p-6 text-center text-gray-400!"
                     >
                         - Currently no data to show -
                     </TableBodyCell>

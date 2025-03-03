@@ -51,7 +51,7 @@
             <div class="flex-1">: {datePrettier(summary.timestamp)}</div>
         </div>
     </div>
-    <div class="w-[120px] h-[120px] bg-gray-300 rounded overflow-hidden">
+    <div class="w-[120px] h-[120px] bg-gray-300 rounded-sm overflow-hidden">
         <img src={qrSrc} class="w-full" alt="Short URL's QR code" />
     </div>
 </div>
