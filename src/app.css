@@ -21,7 +21,9 @@
 @source "../node_modules/flowbite-svelte/dist";
 
 input::-ms-reveal,
-input::-ms-clear {
+input::-ms-clear,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
     display: none;
 }
 
