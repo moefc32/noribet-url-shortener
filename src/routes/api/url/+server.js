@@ -1,9 +1,9 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import { init } from "@paralleldrive/cuid2";
+import { init } from '@paralleldrive/cuid2';
 import model from '$lib/server/model/url';
 import trimText from '$lib/trimText';
-import isValidShortURL from "$lib/isValidShortURL";
+import isValidShortURL from '$lib/isValidShortURL';
 
 export async function GET({ url }) {
     const page = url.searchParams.get('page') || 1;

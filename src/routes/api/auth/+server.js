@@ -8,7 +8,7 @@ import { hashPassword, comparePassword } from '$lib/server/hash';
 import decodeToken from '$lib/server/token';
 import jwt from 'jsonwebtoken';
 import model from '$lib/server/model/auth';
-import isValidEmail from "$lib/isValidEmail";
+import isValidEmail from '$lib/isValidEmail';
 import parseMs from '$lib/parseMs';
 
 export async function POST({ cookies, request }) {
