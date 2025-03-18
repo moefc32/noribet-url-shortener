@@ -1,6 +1,6 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import { init } from '@paralleldrive/cuid2';
+import { init as cuid2 } from '@paralleldrive/cuid2';
 import model from '$lib/server/model/url';
 import trimText from '$lib/trimText';
 import isValidShortURL from '$lib/isValidShortURL';
@@ -60,8 +60,10 @@ export async function POST({ request }) {
     }
 
     try {
+        const cuid = cuid2({ length: 8 })();
+
         const result = await model.createData({
-            short_url: short_url ? trimText(short_url) : init({ length: 8 })(),
+            short_url: short_url ? trimText(short_url) : cuid,
             long_url: trimText(long_url)
         });
 
