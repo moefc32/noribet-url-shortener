@@ -10,8 +10,11 @@ export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
     const currentPath = url.pathname;
 
-    const publicPaths = ['/', '/api', '/api/auth'];
-    if (publicPaths.some(path => currentPath.startsWith(path))) {
+    const publicPaths = ['/api', '/api/auth'];
+    if (
+        currentPath === '/' ||
+        publicPaths.some(path => currentPath.startsWith(path))
+    ) {
         return resolve(event);
     }
 
