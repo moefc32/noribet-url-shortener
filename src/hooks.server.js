@@ -26,6 +26,10 @@ export const handle = async ({ event, resolve }) => {
         cookies.delete('access_token', { path: '/' });
     }
 
+    if (isTokenValid) {
+        return resolve(event);
+    }
+
     return json({
         application: VITE_APP_NAME,
         message: 'Unauthorized access, please login!',
