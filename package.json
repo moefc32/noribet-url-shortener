@@ -10,15 +10,15 @@
         "prepare": "svelte-kit sync || echo ''"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "^5.2.13",
-        "@sveltejs/kit": "^2.27.1",
+        "@sveltejs/adapter-node": "^5.3.2",
+        "@sveltejs/kit": "^2.38.1",
         "@sveltejs/vite-plugin-svelte": "^5.1.1",
-        "@tailwindcss/vite": "^4.1.11",
+        "@tailwindcss/vite": "^4.1.13",
         "flowbite": "^3.1.2",
         "flowbite-svelte": "^0.47.4",
-        "svelte": "^5.37.3",
-        "tailwindcss": "^4.1.11",
-        "vite": "^6.3.5"
+        "svelte": "^5.38.9",
+        "tailwindcss": "^4.1.13",
+        "vite": "^6.3.6"
     },
     "dependencies": {
         "@fontsource-variable/plus-jakarta-sans": "^5.2.6",
