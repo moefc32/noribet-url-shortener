@@ -9,14 +9,8 @@
     import Login from './Login.svelte';
     import EditAccount from './EditAccount.svelte';
 
-    let modalLogin = false;
     let modalProfile = false;
 
-    let login = {
-        email: '',
-        password: '',
-        loading: false,
-    };
     let profile = {
         email: $page.data.user_email,
         password: '',
@@ -46,32 +40,6 @@
         }
     }
 
-    async function doLogin() {
-        try {
-            login.loading = true;
-            if (!isValidEmail(login.email)) throw new Error();
-
-            const response = await fetch('/api/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(login),
-            });
-
-            if (!response.ok) throw new Error();
-
-            notyf.success('You have successfully logged in.');
-            goto('/', { invalidateAll: true });
-            modalLogin = false;
-        } catch (e) {
-            login.loading = false;
-
-            console.error(e);
-            notyf.error('Login failed, please check all data and try again!');
-        }
-    }
-
     async function doLogout() {
         try {
             const response = await fetch('/api/auth', {
@@ -84,7 +52,7 @@
             if (!response.ok) throw new Error();
 
             notyf.success('You are now logged out.');
-            goto('/', { invalidateAll: true });
+            goto('/login', { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Logout failed, please try again!');
@@ -106,44 +74,34 @@
         </button>
     </div>
     <div class="flex gap-1 ms-auto text-[16px]">
-        {#if $page.data.access_token}
-            <Button
-                outline
-                color="dark"
-                class="flex gap-1 px-4 py-2 cursor-pointer"
-                title="Edit login account"
-                on:click={() => (modalProfile = true)}
-            >
-                <Key size={14} />
-                <span class="hidden md:inline">Edit Account</span>
-            </Button>
-            <Button
-                color="purple"
-                class="flex gap-1 px-4 py-2 cursor-pointer"
-                title="Logout from application"
-                on:click={() => doLogout()}
-            >
-                <LogOut size={14} />
-                <span class="hidden md:inline">Logout</span>
-            </Button>
-        {:else}
-            <Button
-                color="blue"
-                class="flex gap-1 px-4 py-2 cursor-pointer"
-                title="Login to application"
-                on:click={() => (modalLogin = true)}
-            >
-                <LogIn size={14} />
-                <span class="hidden md:inline">Login</span>
-            </Button>
-        {/if}
+        <Button
+            outline
+            color="dark"
+            class="flex gap-1 px-4 py-2 cursor-pointer"
+            title="Edit login account"
+            on:click={() => (modalProfile = true)}
+        >
+            <Key size={14} />
+            <span class="hidden md:inline">Edit Account</span>
+        </Button>
+        <Button
+            color="purple"
+            class="flex gap-1 px-4 py-2 cursor-pointer"
+            title="Logout from application"
+            on:click={() => doLogout()}
+        >
+            <LogOut size={14} />
+            <span class="hidden md:inline">Logout</span>
+        </Button>
     </div>
 </header>
 
-<Modal class="max-w-[320px]" bind:open={modalLogin} autoclose outsideclose>
-    <Login {login} {doLogin} />
-</Modal>
-
-<Modal class="max-w-[320px]" bind:open={modalProfile} autoclose outsideclose>
+<Modal
+    size="xs"
+    backdropClass={'bg-black/75 fixed inset-0 z-50'}
+    bind:open={modalProfile}
+    autoclose
+    outsideclose
+>
     <EditAccount {profile} {updateProfile} />
 </Modal>

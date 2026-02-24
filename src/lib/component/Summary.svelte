@@ -19,21 +19,26 @@
 </script>
 
 <div
-    class="card flex flex-row justify-start items-stretch bg-white dark:bg-gray-700 dark:text-white p-3 w-full rounded-md shadow-xl"
+    class="card flex flex-col md:flex-row justify-start items-stretch bg-white dark:bg-gray-700 dark:text-white p-3 w-full rounded-md shadow-xl"
 >
     <div class="flex flex-1 flex-col justify-start items-stretch gap-1">
-        <div class="flex">
-            <div class="w-[125px]">Short URL</div>
-            <div class="flex-1">
-                : <a href="/{summary.short_url}" target="_blank">
+        <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
+            <div class="flex sm:w-[135px] pe-1">
+                <span class="sm:flex-1 me-1">Short URL</span>
+                <span>:</span>
+            </div>
+            <span class="flex-1">
+                <a href="/{summary.short_url}" target="_blank">
                     {summary.short_url}
                 </a>
-            </div>
+            </span>
         </div>
-        <div class="flex">
-            <div class="w-[125px]">Destination URL</div>
-            <div class="flex-1">
-                :
+        <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
+            <div class="flex sm:w-[135px] pe-1">
+                <span class="sm:flex-1 me-1">Destination URL</span>
+                <span>:</span>
+            </div>
+            <span class="flex-1">
                 <a
                     href={summary.long_url}
                     target="_blank"
@@ -41,18 +46,26 @@
                 >
                     {summary.long_url}
                 </a>
+            </span>
+        </div>
+        <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
+            <div class="flex sm:w-[135px] pe-1">
+                <span class="sm:flex-1 me-1">Total Clicks</span>
+                <span>:</span>
             </div>
+            <span class="flex-1">{summary.clicks}</span>
         </div>
-        <div class="flex">
-            <div class="w-[125px]">Total Clicks</div>
-            <div class="flex-1">: {summary.clicks}</div>
-        </div>
-        <div class="flex">
-            <div class="w-[125px]">Created At</div>
-            <div class="flex-1">: {datePrettier(summary.timestamp)}</div>
+        <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
+            <div class="flex sm:w-[135px] pe-1">
+                <span class="sm:flex-1 me-1">Created At</span>
+                <span>:</span>
+            </div>
+            <span class="flex-1">{datePrettier(summary.timestamp)}</span>
         </div>
     </div>
-    <div class="w-[120px] h-[120px] bg-gray-300 rounded-sm overflow-hidden">
+    <div
+        class="w-[120px] h-[120px] mt-6 md:mt-0 bg-gray-300 rounded-sm overflow-hidden"
+    >
         <img src={qrSrc} class="w-full" alt="Short URL's QR code" />
     </div>
 </div>

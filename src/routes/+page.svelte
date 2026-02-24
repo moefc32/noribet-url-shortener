@@ -1,5 +1,4 @@
 <script>
-    import { page } from '$app/stores';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
@@ -61,14 +60,6 @@
 
 <main class="container flex flex-1 flex-col gap-6 mx-auto p-6">
     <Header />
-    {#if $page.data.access_token}
-        <CreateURL {reloadURLList} />
-        <TableURL {search} {doSearch} {contents} {reloadURLList} />
-    {:else}
-        <div
-            class="flex flex-1 flex-col justify-center items-center gap-3 mx-auto pb-12 w-full max-w-screen-md"
-        >
-            <CreateURL {reloadURLList} />
-        </div>
-    {/if}
+    <CreateURL {reloadURLList} />
+    <TableURL {search} {doSearch} {contents} {reloadURLList} />
 </main>

@@ -1,5 +1,4 @@
 <script>
-    import { page } from '$app/stores';
     import { Input, Button } from 'flowbite-svelte';
     import { Link, Check } from 'lucide-svelte';
     import isValidEmail from '$lib/isValidEmail';
@@ -17,7 +16,7 @@
 </script>
 
 <div class="flex flex-col gap-2 dark:text-white">
-    <Link size={50} class="mx-auto mb-3" />
+    <Link size={50} class="mx-auto my-3" />
     <Input
         class="mb-3 dark:bg-gray-800"
         placeholder="New destination URL"
@@ -30,7 +29,7 @@
         bind:value={formData.short_url}
         on:keydown={handleKeydown}
     />
-    <div class="flex gap-1 mt-2">
+    <div class="flex gap-3 mt-2">
         <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button>
         <Button
             color="green"

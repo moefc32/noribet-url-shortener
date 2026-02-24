@@ -40,37 +40,45 @@
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
-    <Table striped={true} hoverable={true}>
-        <TableHead>
-            <TableHeadCell class="whitespace-nowrap">Accessed At</TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">Referrer</TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">User Agent</TableHeadCell>
-        </TableHead>
-        <TableBody tableBodyClass="divide-y">
-            {#if !contents[0].history_timestamp}
-                <TableBodyRow>
-                    <TableBodyCell
-                        colspan="3"
-                        class="p-6 text-center text-gray-400!"
-                    >
-                        - Currently no data to show -
-                    </TableBodyCell>
-                </TableBodyRow>
-            {:else}
-                {#each contents as item, i}
+    <div class="px-3 w-full">
+        <Table striped={true} hoverable={true}>
+            <TableHead>
+                <TableHeadCell class="whitespace-nowrap"
+                    >Accessed At</TableHeadCell
+                >
+                <TableHeadCell class="whitespace-nowrap">Referrer</TableHeadCell
+                >
+                <TableHeadCell class="whitespace-nowrap"
+                    >User Agent</TableHeadCell
+                >
+            </TableHead>
+            <TableBody tableBodyClass="divide-y">
+                {#if !contents[0].history_timestamp}
                     <TableBodyRow>
-                        <TableBodyCell class="w-[1%] whitespace-nowrap">
-                            {datePrettier(item.history_timestamp)}
+                        <TableBodyCell
+                            colspan="3"
+                            class="p-6 text-center text-gray-400!"
+                        >
+                            - Currently no data to show -
                         </TableBodyCell>
-                        <TableBodyCell>
-                            <a href={item.ref} target="_blank">{item.ref}</a>
-                        </TableBodyCell>
-                        <TableBodyCell>{item.agent}</TableBodyCell>
                     </TableBodyRow>
-                {/each}
-            {/if}
-        </TableBody>
-    </Table>
+                {:else}
+                    {#each contents as item, i}
+                        <TableBodyRow>
+                            <TableBodyCell class="w-[1%] whitespace-nowrap">
+                                {datePrettier(item.history_timestamp)}
+                            </TableBodyCell>
+                            <TableBodyCell>
+                                <a href={item.ref} target="_blank">{item.ref}</a
+                                >
+                            </TableBodyCell>
+                            <TableBodyCell>{item.agent}</TableBodyCell>
+                        </TableBodyRow>
+                    {/each}
+                {/if}
+            </TableBody>
+        </Table>
+    </div>
     <div class="flex p-3 w-full">
         <Pagination
             pages={[

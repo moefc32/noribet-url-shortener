@@ -1,7 +1,7 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import { init as cuid2 } from '@paralleldrive/cuid2';
-import model from '$lib/server/model/url';
+import model from '$lib/server/db/model/url';
 import trimText from '$lib/trimText';
 import isValidShortURL from '$lib/isValidShortURL';
 

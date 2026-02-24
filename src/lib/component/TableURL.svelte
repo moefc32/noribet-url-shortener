@@ -134,89 +134,91 @@
             bind:value={search.keyword}
         />
     </div>
-    <Table striped={true} hoverable={true}>
-        <TableHead>
-            <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">
-                Destination URL
-            </TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">
-                Total Clicks
-            </TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">Created At</TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
-        </TableHead>
-        <TableBody tableBodyClass="divide-y">
-            {#if (search.keyword && !search.results.length) || !contents.length}
-                <TableBodyRow>
-                    <TableBodyCell
-                        colspan="5"
-                        class="p-6 text-center text-gray-400!"
-                    >
-                        {search.keyword
-                            ? '- No data found -'
-                            : '- Currently no data to show -'}
-                    </TableBodyCell>
-                </TableBodyRow>
-            {/if}
-            {#each search.keyword ? search.results : contents as item, i}
-                <TableBodyRow>
-                    <TableBodyCell>
-                        <a href="/{item.short_url}" target="_blank">
-                            {item.short_url}
-                        </a>
-                    </TableBodyCell>
-                    <TableBodyCell>
-                        <a
-                            href={item.long_url}
-                            target="_blank"
-                            title={item.long_url}
+    <div class="px-3 w-full">
+        <Table striped={true} hoverable={true}>
+            <TableHead>
+                <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
+                <TableHeadCell class="whitespace-nowrap">
+                    Destination URL
+                </TableHeadCell>
+                <TableHeadCell class="whitespace-nowrap">Clicks</TableHeadCell>
+                <TableHeadCell class="whitespace-nowrap"
+                    >Created At</TableHeadCell
+                >
+                <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
+            </TableHead>
+            <TableBody tableBodyClass="divide-y">
+                {#if (search.keyword && !search.results.length) || !contents.length}
+                    <TableBodyRow>
+                        <TableBodyCell
+                            colspan="5"
+                            class="p-6 text-center text-gray-400!"
                         >
-                            {item.long_url}
-                        </a>
-                    </TableBodyCell>
-                    <TableBodyCell>{item.clicks}</TableBodyCell>
-                    <TableBodyCell class="w-[1%] whitespace-nowrap">
-                        {datePrettier(item.timestamp)}
-                    </TableBodyCell>
-                    <TableBodyCell class="w-[1%] whitespace-nowrap">
-                        <div class="flex gap-1">
-                            <Button
-                                size="sm"
-                                color="blue"
-                                class="flex gap-1"
-                                title="View click statistics"
-                                on:click={() => goto(`/${item.short_url}~`)}
+                            {search.keyword
+                                ? '- No data found -'
+                                : '- Currently no data to show -'}
+                        </TableBodyCell>
+                    </TableBodyRow>
+                {/if}
+                {#each search.keyword ? search.results : contents as item, i}
+                    <TableBodyRow>
+                        <TableBodyCell>
+                            <a href="/{item.short_url}" target="_blank">
+                                {item.short_url}
+                            </a>
+                        </TableBodyCell>
+                        <TableBodyCell>
+                            <a
+                                href={item.long_url}
+                                target="_blank"
+                                title={item.long_url}
                             >
-                                <ChartColumn size={12} />
-                                <span class="hidden md:inline">Stats</span>
-                            </Button>
-                            <Button
-                                size="sm"
-                                color="yellow"
-                                class="flex gap-1 text-black"
-                                title="Edit this entry"
-                                on:click={() => openEditModal(item)}
-                            >
-                                <Pen size={12} />
-                                <span class="hidden md:inline">Edit</span>
-                            </Button>
-                            <Button
-                                size="sm"
-                                color="red"
-                                class="flex gap-1"
-                                title="Delete this entry"
-                                on:click={() => openDeleteModal(item.id)}
-                            >
-                                <Trash2 size={12} />
-                                <span class="hidden md:inline">Delete</span>
-                            </Button>
-                        </div>
-                    </TableBodyCell>
-                </TableBodyRow>
-            {/each}
-        </TableBody>
-    </Table>
+                                {item.long_url}
+                            </a>
+                        </TableBodyCell>
+                        <TableBodyCell>{item.clicks}</TableBodyCell>
+                        <TableBodyCell class="w-[1%] whitespace-nowrap">
+                            {datePrettier(item.timestamp)}
+                        </TableBodyCell>
+                        <TableBodyCell class="w-[1%] whitespace-nowrap">
+                            <div class="flex gap-1">
+                                <Button
+                                    size="sm"
+                                    color="blue"
+                                    class="flex gap-1"
+                                    title="View click statistics"
+                                    on:click={() => goto(`/${item.short_url}~`)}
+                                >
+                                    <ChartColumn size={12} />
+                                    <span class="hidden md:inline">Stats</span>
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    color="yellow"
+                                    class="flex gap-1 text-black"
+                                    title="Edit this entry"
+                                    on:click={() => openEditModal(item)}
+                                >
+                                    <Pen size={12} />
+                                    <span class="hidden md:inline">Edit</span>
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    color="red"
+                                    class="flex gap-1"
+                                    title="Delete this entry"
+                                    on:click={() => openDeleteModal(item.id)}
+                                >
+                                    <Trash2 size={12} />
+                                    <span class="hidden md:inline">Delete</span>
+                                </Button>
+                            </div>
+                        </TableBodyCell>
+                    </TableBodyRow>
+                {/each}
+            </TableBody>
+        </Table>
+    </div>
     <div class="flex p-3 w-full">
         <Pagination
             pages={[
@@ -230,17 +232,29 @@
     </div>
 </div>
 
-<Modal size="xs" bind:open={itemEdit} autoclose outsideclose>
+<Modal
+    size="xs"
+    backdropClass={'bg-black/75 fixed inset-0 z-50'}
+    bind:open={itemEdit}
+    autoclose
+    outsideclose
+>
     <EditURL {formData} {editEntry} />
 </Modal>
 
-<Modal size="xs" bind:open={itemDelete} autoclose outsideclose>
+<Modal
+    size="xs"
+    backdropClass={'bg-black/75 fixed inset-0 z-50'}
+    bind:open={itemDelete}
+    autoclose
+    outsideclose
+>
     <div class="flex flex-col gap-2">
-        <CircleAlert size={50} class="mx-auto mb-3" />
+        <CircleAlert size={50} class="mx-auto my-3" />
         <h3 class="mb-5 text-lg text-center">
             Are you sure you want to delete this entry?
         </h3>
-        <div class="flex gap-1 mt-2">
+        <div class="flex gap-3 mt-2">
             <Button class="flex flex-1 gap-1" color="alternative">
                 Cancel
             </Button>

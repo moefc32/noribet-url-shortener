@@ -1,5 +1,4 @@
 <script>
-    import { page } from '$app/stores';
     import { Input, ButtonGroup, Button, Spinner } from 'flowbite-svelte';
     import { Eye, EyeOff, LogIn } from 'lucide-svelte';
     import isValidEmail from '$lib/isValidEmail';

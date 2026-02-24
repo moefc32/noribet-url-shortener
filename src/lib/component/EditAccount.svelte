@@ -1,5 +1,4 @@
 <script>
-    import { page } from '$app/stores';
     import { Input, ButtonGroup, Button, Spinner } from 'flowbite-svelte';
     import { Eye, EyeOff, Check } from 'lucide-svelte';
     import isValidEmail from '$lib/isValidEmail';
@@ -17,7 +16,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-    <h1 class="mb-2 text-3xl text-center">Edit Account</h1>
+    <h1 class="mb-2 my-3 text-3xl text-center">Edit Account</h1>
     <Input
         type="email"
         class="input input-bordered dark:bg-gray-800 w-full"
@@ -64,17 +63,19 @@
             </ButtonGroup>
         {/if}
     </Input>
-    <Button
-        color="green"
-        class="flex gap-1 mt-2"
-        disabled={!profile.email || !isValidEmail(profile.email)}
-        on:click={() => updateProfile()}
-    >
-        {#if profile.loading}
-            <Spinner size="3" color="white" /> Loading...
-        {:else}
-            <Check size={14} /> Save
-        {/if}
-    </Button>
-    <Button class="flex gap-1" color="alternative">Cancel</Button>
+    <div class="flex gap-3 mt-2">
+        <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button>
+        <Button
+            color="green"
+            class="flex flex-1 gap-1"
+            disabled={!profile.email || !isValidEmail(profile.email)}
+            on:click={() => updateProfile()}
+        >
+            {#if profile.loading}
+                <Spinner size="3" color="white" /> Loading...
+            {:else}
+                <Check size={14} /> Save
+            {/if}
+        </Button>
+    </div>
 </div>

@@ -1,48 +1,45 @@
 <script>
     import { goto } from '$app/navigation';
     import { Input, ButtonGroup, Button, Spinner } from 'flowbite-svelte';
-    import { Eye, EyeOff, Check } from 'lucide-svelte';
+    import { Eye, EyeOff, LogIn } from 'lucide-svelte';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
-    let register = {
+    let login = {
         email: '',
         password: '',
         loading: false,
     };
-
     let showPassword = false;
 
     async function handleKeydown(event) {
-        if (event.key === 'Enter' && register.email && register.password) {
-            doRegister();
+        if (event.key === 'Enter' && login.email && login.password) {
+            doLogin();
         }
     }
 
-    async function doRegister() {
+    async function doLogin() {
         try {
-            register.loading = true;
-            if (!isValidEmail(register.email)) throw new Error();
+            login.loading = true;
+            if (!isValidEmail(login.email)) throw new Error();
 
             const response = await fetch('/api/auth', {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(register),
+                body: JSON.stringify(login),
             });
 
             if (!response.ok) throw new Error();
 
-            notyf.success('Site initialization completed, you may now log in.');
+            notyf.success('You have successfully logged in.');
             goto('/', { invalidateAll: true });
         } catch (e) {
-            register.loading = false;
+            login.loading = false;
 
             console.error(e);
-            notyf.error(
-                'Register failed, please check all data and try again!',
-            );
+            notyf.error('Login failed, please check all data and try again!');
         }
     }
 </script>
@@ -53,17 +50,14 @@
     <div
         class="card flex flex-col gap-2 my-auto p-6 bg-white dark:bg-gray-700 dark:text-white w-full max-w-[320px] shadow-xl rounded-md"
     >
-        <h1 class="mt-2 text-3xl text-center">
+        <h1 class="mb-2 text-3xl text-center">
             {import.meta.env.VITE_APP_NAME}
         </h1>
-        <p class="mb-2 text-center text-gray-500">
-            Please register an account before you can use this application
-        </p>
         <Input
             type="email"
             class="input input-bordered dark:bg-gray-800 w-full"
             placeholder="Email"
-            bind:value={register.email}
+            bind:value={login.email}
             on:keydown={handleKeydown}
         />
         <Input
@@ -75,7 +69,7 @@
                         type="password"
                         class="grow dark:bg-gray-800"
                         placeholder="Password"
-                        bind:value={register.password}
+                        bind:value={login.password}
                         on:keydown={handleKeydown}
                     />
                     <button
@@ -92,7 +86,7 @@
                         type="text"
                         class="grow dark:bg-gray-800"
                         placeholder="Password"
-                        bind:value={register.password}
+                        bind:value={login.password}
                         on:keydown={handleKeydown}
                     />
                     <button
@@ -108,17 +102,17 @@
         <Button
             color="blue"
             class="flex gap-1 mt-2"
-            title="Register new account"
-            disabled={!register.email ||
-                !isValidEmail(register.email) ||
-                !register.password ||
-                register.loading}
-            on:click={() => doRegister()}
+            title="Login to application"
+            disabled={!login.email ||
+                !isValidEmail(login.email) ||
+                !login.password ||
+                login.loading}
+            on:click={() => doLogin()}
         >
-            {#if register.loading}
+            {#if login.loading}
                 <Spinner size="3" color="white" /> Loading...
             {:else}
-                <Check size={14} /> Register
+                <LogIn size={14} /> Login
             {/if}
         </Button>
     </div>
