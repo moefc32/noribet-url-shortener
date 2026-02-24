@@ -50,14 +50,12 @@ export default {
                         url_id,
                         ref,
                         agent,
-                        address,
                         timestamp
                     ) VALUES (?, ?, ?, ?, ?);
                 `, [
                 result[0].id,
                 data.ref,
                 data.agent,
-                data.address,
                 timestamp
             ]);
 
@@ -79,7 +77,6 @@ export default {
                         t.timestamp,
                         h.ref,
                         h.agent,
-                        h.address,
                         h.timestamp AS history_timestamp
                     FROM ${TABLE_URL} t
                     LEFT JOIN ${TABLE_HISTORY} h

@@ -1,7 +1,6 @@
 <script>
-    import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { Notyf } from 'notyf';
+    import notyf from '$lib/notyf';
     import {
         Input,
         Table,
@@ -12,20 +11,12 @@
         TableHeadCell,
         Button,
         Pagination,
-        PaginationItem,
         Modal,
     } from 'flowbite-svelte';
-    import {
-        ChartColumn,
-        Pen,
-        Trash2,
-        Link,
-        CircleAlert,
-        Check,
-    } from 'lucide-svelte';
+    import { ChartColumn, Pen, Trash2, CircleAlert } from 'lucide-svelte';
     import datePrettier from '$lib/datePrettier';
 
-    let notyf;
+    import EditURL from './EditURL.svelte';
 
     export let search;
     export let doSearch;
@@ -41,6 +32,7 @@
     };
     let searchTimeout;
     let currentPage = 1;
+    let totalPage;
 
     function previous() {
         const newPage = currentPage - 1 < 1 ? 1 : currentPage - 1;
@@ -99,6 +91,7 @@
             delete contents.is_new;
 
             await reloadURLList();
+            itemEdit = false;
         } catch (e) {
             console.error(e);
             notyf.error('Save data failed, please try again!');
@@ -124,11 +117,12 @@
         }
     }
 
-    onMount(async () => {
-        notyf = new Notyf();
-    });
+    $: {
+        const totalItemCount = Number(contents[0]?.urls) || 0;
+        const calculated = Math.ceil(totalItemCount / 10);
 
-    $: totalPage = Math.max(1, Math.ceil(contents[0]?.urls / 10));
+        totalPage = Math.max(1, isNaN(calculated) ? 1 : calculated);
+    }
 </script>
 
 <div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
@@ -143,31 +137,34 @@
     <Table striped={true} hoverable={true}>
         <TableHead>
             <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap"
-                >Destination URL</TableHeadCell
-            >
-            <TableHeadCell class="whitespace-nowrap">Total Clicks</TableHeadCell
-            >
+            <TableHeadCell class="whitespace-nowrap">
+                Destination URL
+            </TableHeadCell>
+            <TableHeadCell class="whitespace-nowrap">
+                Total Clicks
+            </TableHeadCell>
             <TableHeadCell class="whitespace-nowrap">Created At</TableHeadCell>
             <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
-            {#if !contents.length}
+            {#if (search.keyword && !search.results.length) || !contents.length}
                 <TableBodyRow>
                     <TableBodyCell
                         colspan="5"
                         class="p-6 text-center text-gray-400!"
                     >
-                        - Currently no data to show -
+                        {search.keyword
+                            ? '- No data found -'
+                            : '- Currently no data to show -'}
                     </TableBodyCell>
                 </TableBodyRow>
             {/if}
             {#each search.keyword ? search.results : contents as item, i}
                 <TableBodyRow>
                     <TableBodyCell>
-                        <a href="/{item.short_url}" target="_blank"
-                            >{item.short_url}</a
-                        >
+                        <a href="/{item.short_url}" target="_blank">
+                            {item.short_url}
+                        </a>
                     </TableBodyCell>
                     <TableBodyCell>
                         <a
@@ -224,7 +221,7 @@
         <Pagination
             pages={[
                 {
-                    name: `${currentPage} of ${totalPage}`,
+                    name: `${currentPage} of ${totalPage || 1}`,
                 },
             ]}
             on:previous={previous}
@@ -234,30 +231,7 @@
 </div>
 
 <Modal size="xs" bind:open={itemEdit} autoclose outsideclose>
-    <div class="flex flex-col gap-2">
-        <Link size={50} class="mx-auto mb-3" />
-        <Input
-            class="mb-3 dark:bg-gray-800"
-            placeholder="New destination URL"
-            bind:value={formData.long_url}
-        />
-        <Input
-            class="mb-3 dark:bg-gray-800"
-            placeholder="New short URL"
-            bind:value={formData.short_url}
-        />
-        <div class="flex gap-1 mt-2">
-            <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button
-            >
-            <Button
-                color="green"
-                class="flex flex-1 gap-1"
-                on:click={() => editEntry()}
-            >
-                <Check size={14} /> Save
-            </Button>
-        </div>
-    </div>
+    <EditURL {formData} {editEntry} />
 </Modal>
 
 <Modal size="xs" bind:open={itemDelete} autoclose outsideclose>
@@ -267,8 +241,9 @@
             Are you sure you want to delete this entry?
         </h3>
         <div class="flex gap-1 mt-2">
-            <Button class="flex flex-1 gap-1" color="alternative">Cancel</Button
-            >
+            <Button class="flex flex-1 gap-1" color="alternative">
+                Cancel
+            </Button>
             <Button
                 color="red"
                 class="flex flex-1 gap-1"

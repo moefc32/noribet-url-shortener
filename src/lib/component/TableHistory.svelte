@@ -45,13 +45,12 @@
             <TableHeadCell class="whitespace-nowrap">Accessed At</TableHeadCell>
             <TableHeadCell class="whitespace-nowrap">Referrer</TableHeadCell>
             <TableHeadCell class="whitespace-nowrap">User Agent</TableHeadCell>
-            <TableHeadCell class="whitespace-nowrap">IP Address</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
             {#if !contents[0].history_timestamp}
                 <TableBodyRow>
                     <TableBodyCell
-                        colspan="4"
+                        colspan="3"
                         class="p-6 text-center text-gray-400!"
                     >
                         - Currently no data to show -
@@ -67,7 +66,6 @@
                             <a href={item.ref} target="_blank">{item.ref}</a>
                         </TableBodyCell>
                         <TableBodyCell>{item.agent}</TableBodyCell>
-                        <TableBodyCell>{item.address}</TableBodyCell>
                     </TableBodyRow>
                 {/each}
             {/if}
@@ -77,7 +75,7 @@
         <Pagination
             pages={[
                 {
-                    name: `${currentPage} of ${totalPage}`,
+                    name: `${currentPage} of ${totalPage || 1}`,
                 },
             ]}
             on:previous={previous}

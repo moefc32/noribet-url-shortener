@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import {
         Input,
         ButtonGroup,
@@ -8,10 +9,8 @@
         Spinner,
     } from 'flowbite-svelte';
     import { Check } from 'lucide-svelte';
-    import { Notyf } from 'notyf';
+    import notyf from '$lib/notyf';
     import isValidShortURL from '$lib/isValidShortURL';
-
-    let notyf;
 
     export let reloadURLList;
 
@@ -50,7 +49,8 @@
             formData.long_url = '';
             formData.short_url = '';
             formData.loading = false;
-            await notyf.success('New short URL created successfully.');
+
+            notyf.success('New short URL created successfully.');
         } catch (e) {
             formData.loading = false;
 
@@ -60,7 +60,6 @@
     }
 
     onMount(async () => {
-        notyf = new Notyf();
         siteAddress = window.location.href;
     });
 </script>

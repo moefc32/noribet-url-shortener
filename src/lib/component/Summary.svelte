@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import QRCode from 'qrcode';
     import datePrettier from '$lib/datePrettier';
 

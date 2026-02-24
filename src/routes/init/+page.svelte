@@ -1,12 +1,10 @@
 <script>
-    import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import { goto } from '$app/navigation';
     import { Input, ButtonGroup, Button, Spinner } from 'flowbite-svelte';
     import { Eye, EyeOff, Check } from 'lucide-svelte';
-    import { Notyf } from 'notyf';
+    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
-
-    let notyf;
 
     let register = {
         email: '',
@@ -36,7 +34,9 @@
             });
 
             if (!response.ok) throw new Error();
-            window.location.href = '/';
+
+            notyf.success('Site initialization completed, you may now log in.');
+            goto('/', { invalidateAll: true });
         } catch (e) {
             register.loading = false;
 
@@ -46,10 +46,6 @@
             );
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <main

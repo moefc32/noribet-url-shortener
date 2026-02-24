@@ -3,7 +3,7 @@ import decodeToken from '$lib/server/token';
 import modelAuth from '$lib/server/model/auth';
 import modelURL from '$lib/server/model/url';
 
-export async function load({ cookies, params, request, getClientAddress }) {
+export async function load({ cookies, params, request }) {
     const { short_url } = params;
     const stats = short_url.endsWith('~');
 
@@ -12,7 +12,6 @@ export async function load({ cookies, params, request, getClientAddress }) {
             short_url,
             ref: request.headers.get('referer'),
             agent: request.headers.get('user-agent'),
-            address: getClientAddress(),
         })
         const long_url = response[0]?.long_url;
 

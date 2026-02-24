@@ -1,14 +1,11 @@
 <script>
-    import { onMount } from 'svelte';
     import { page } from '$app/stores';
-    import { Notyf } from 'notyf';
+    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
     import Header from '$lib/component/Header.svelte';
     import TableURL from '$lib/component/TableURL.svelte';
     import CreateURL from '$lib/component/CreateURL.svelte';
-
-    let notyf;
 
     export let data;
 
@@ -60,10 +57,6 @@
             console.error(e);
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <main class="container flex flex-1 flex-col gap-6 mx-auto p-6">

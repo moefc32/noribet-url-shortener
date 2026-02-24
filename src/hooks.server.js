@@ -10,14 +10,6 @@ export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
     const currentPath = url.pathname;
 
-    const publicPaths = ['/api', '/api/auth'];
-    if (
-        currentPath === '/' ||
-        publicPaths.some(path => currentPath.startsWith(path))
-    ) {
-        return resolve(event);
-    }
-
     const isTokenValid = validateToken(cookies);
     const isUserExists = isTokenValid
         && checkIsUserExists(isTokenValid.id);
@@ -26,14 +18,5 @@ export const handle = async ({ event, resolve }) => {
         cookies.delete('access_token', { path: '/' });
     }
 
-    if (isTokenValid) {
-        return resolve(event);
-    }
-
-    return json({
-        application: VITE_APP_NAME,
-        message: 'Unauthorized access, please login!',
-    }, {
-        status: 401,
-    });
+    return resolve(event);
 }

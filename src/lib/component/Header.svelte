@@ -1,16 +1,13 @@
 <script>
-    import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
     import { Modal, Button } from 'flowbite-svelte';
     import { Key, LogOut, LogIn } from 'lucide-svelte';
-    import { Notyf } from 'notyf';
+    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
     import Login from './Login.svelte';
     import EditAccount from './EditAccount.svelte';
-
-    let notyf;
 
     let modalLogin = false;
     let modalProfile = false;
@@ -40,8 +37,9 @@
 
             if (!response.ok) throw new Error();
 
-            await notyf.success('Profile info updated successfully.');
-            setTimeout(() => (window.location.href = '/'), 500);
+            notyf.success('Profile info updated successfully.');
+            goto('/', { invalidateAll: true });
+            modalProfile = false;
         } catch (e) {
             console.error(e);
             notyf.error('Update login account info failed, please try again!');
@@ -62,7 +60,10 @@
             });
 
             if (!response.ok) throw new Error();
-            window.location.href = '/';
+
+            notyf.success('You have successfully logged in.');
+            goto('/', { invalidateAll: true });
+            modalLogin = false;
         } catch (e) {
             login.loading = false;
 
@@ -81,16 +82,14 @@
             });
 
             if (!response.ok) throw new Error();
-            window.location.href = '/';
+
+            notyf.success('You are now logged out.');
+            goto('/', { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Logout failed, please try again!');
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
@@ -100,43 +99,45 @@
 >
     <div class="flex-1">
         <button
-            class="flex items-center gap-1 ps-12 pe-3 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-[length:40px] text-2xl font-bold h-[40px] cursor-pointer"
+            class="flex items-center gap-1 ps-10 pe-3 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px] cursor-pointer"
             on:click={() => goto('/')}
         >
             {import.meta.env.VITE_APP_NAME}
         </button>
     </div>
-    {#if $page.data.access_token}
-        <Button
-            outline
-            color="dark"
-            class="flex gap-1 px-4 py-2 cursor-pointer"
-            title="Edit login account"
-            on:click={() => (modalProfile = true)}
-        >
-            <Key size={14} />
-            <span class="hidden md:inline">Edit Account</span>
-        </Button>
-        <Button
-            color="purple"
-            class="flex gap-1 px-4 py-2 cursor-pointer"
-            title="Logout from application"
-            on:click={() => doLogout()}
-        >
-            <LogOut size={14} />
-            <span class="hidden md:inline">Logout</span>
-        </Button>
-    {:else}
-        <Button
-            color="blue"
-            class="flex gap-1 px-4 py-2 cursor-pointer"
-            title="Login to application"
-            on:click={() => (modalLogin = true)}
-        >
-            <LogIn size={14} />
-            <span class="hidden md:inline">Login</span>
-        </Button>
-    {/if}
+    <div class="flex gap-1 ms-auto text-[16px]">
+        {#if $page.data.access_token}
+            <Button
+                outline
+                color="dark"
+                class="flex gap-1 px-4 py-2 cursor-pointer"
+                title="Edit login account"
+                on:click={() => (modalProfile = true)}
+            >
+                <Key size={14} />
+                <span class="hidden md:inline">Edit Account</span>
+            </Button>
+            <Button
+                color="purple"
+                class="flex gap-1 px-4 py-2 cursor-pointer"
+                title="Logout from application"
+                on:click={() => doLogout()}
+            >
+                <LogOut size={14} />
+                <span class="hidden md:inline">Logout</span>
+            </Button>
+        {:else}
+            <Button
+                color="blue"
+                class="flex gap-1 px-4 py-2 cursor-pointer"
+                title="Login to application"
+                on:click={() => (modalLogin = true)}
+            >
+                <LogIn size={14} />
+                <span class="hidden md:inline">Login</span>
+            </Button>
+        {/if}
+    </div>
 </header>
 
 <Modal class="max-w-[320px]" bind:open={modalLogin} autoclose outsideclose>

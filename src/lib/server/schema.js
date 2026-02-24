@@ -19,7 +19,6 @@ export default function setSchema() {
             url_id TEXT NOT NULL,
             ref TEXT,
             agent TEXT,
-            address TEXT,
             timestamp INTEGER NOT NULL,
             FOREIGN KEY (url_id) REFERENCES url(id) ON DELETE CASCADE
         );`,
