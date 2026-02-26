@@ -35,7 +35,7 @@
             if (!response.ok) throw new Error();
 
             notyf.success('Site initialization completed, you may now log in.');
-            goto('/', { invalidateAll: true });
+            goto('/login', { invalidateAll: true });
         } catch (e) {
             register.loading = false;
 
