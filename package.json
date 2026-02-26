@@ -10,13 +10,13 @@
         "prepare": "svelte-kit sync || echo ''"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "^5.5.3",
-        "@sveltejs/kit": "^2.53.0",
+        "@sveltejs/adapter-node": "^5.5.4",
+        "@sveltejs/kit": "^2.53.3",
         "@sveltejs/vite-plugin-svelte": "^5.1.1",
         "@tailwindcss/vite": "^4.2.1",
         "flowbite": "^3.1.2",
         "flowbite-svelte": "^0.47.4",
-        "svelte": "^5.53.3",
+        "svelte": "^5.53.6",
         "tailwindcss": "^4.2.1",
         "vite": "^6.4.1"
     },

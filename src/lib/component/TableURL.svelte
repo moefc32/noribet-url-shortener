@@ -142,9 +142,9 @@
                     Destination URL
                 </TableHeadCell>
                 <TableHeadCell class="whitespace-nowrap">Clicks</TableHeadCell>
-                <TableHeadCell class="whitespace-nowrap"
-                    >Created At</TableHeadCell
-                >
+                <TableHeadCell class="whitespace-nowrap">
+                    Created At
+                </TableHeadCell>
                 <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
             </TableHead>
             <TableBody tableBodyClass="divide-y">
@@ -178,7 +178,10 @@
                         </TableBodyCell>
                         <TableBodyCell>{item.clicks}</TableBodyCell>
                         <TableBodyCell class="w-[1%] whitespace-nowrap">
-                            {datePrettier(item.timestamp)}
+                            {datePrettier(item.timestamp, {
+                                date: true,
+                                time: true,
+                            })}
                         </TableBodyCell>
                         <TableBodyCell class="w-[1%] whitespace-nowrap">
                             <div class="flex gap-1">

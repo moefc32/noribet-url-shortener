@@ -43,14 +43,14 @@
     <div class="px-3 w-full">
         <Table striped={true} hoverable={true}>
             <TableHead>
-                <TableHeadCell class="whitespace-nowrap"
-                    >Accessed At</TableHeadCell
-                >
+                <TableHeadCell class="whitespace-nowrap">
+                    Accessed At
+                </TableHeadCell>
                 <TableHeadCell class="whitespace-nowrap">Referrer</TableHeadCell
                 >
-                <TableHeadCell class="whitespace-nowrap"
-                    >User Agent</TableHeadCell
-                >
+                <TableHeadCell class="whitespace-nowrap">
+                    User Agent
+                </TableHeadCell>
             </TableHead>
             <TableBody tableBodyClass="divide-y">
                 {#if !contents[0].history_timestamp}
@@ -66,7 +66,10 @@
                     {#each contents as item, i}
                         <TableBodyRow>
                             <TableBodyCell class="w-[1%] whitespace-nowrap">
-                                {datePrettier(item.history_timestamp)}
+                                {datePrettier(item.history_timestamp, {
+                                    date: true,
+                                    time: true,
+                                })}
                             </TableBodyCell>
                             <TableBodyCell>
                                 <a href={item.ref} target="_blank">{item.ref}</a

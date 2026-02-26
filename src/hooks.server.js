@@ -5,40 +5,62 @@ import setSchema from '$lib/server/db/init';
 
 setSchema();
 
+const PUBLIC_ROUTES = [];
 const UNAUTH_ROUTES = ['/login'];
 const INIT_ROUTE = '/init';
+const API_ROUTE = '/api';
 
 export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
     const currentPath = url.pathname;
-
     const isTokenValid = validateToken(cookies);
-    const isUserExists = await model.getData(isTokenValid?.id);
-    const isAuthenticated = !!(isTokenValid && isUserExists);
 
-    if (!isTokenValid || !isUserExists) {
-        cookies.delete('access_token', { path: '/' });
+    const lang = cookies.get('lang');
+    const validLang = lang && ['en', 'id'].includes(lang);
+
+    if (!validLang) {
+        cookies.set('lang', 'en', {
+            path: '/',
+            httpOnly: true,
+        });
     }
 
-    if (isUserExists === false) {
-        const isApiRoute = currentPath.startsWith('/api');
-        const isInitRoute = currentPath === INIT_ROUTE;
+    event.locals.lang = validLang ? lang : 'en';
 
-        if (!isApiRoute && !isInitRoute) {
-            throw redirect(303, INIT_ROUTE);
+    let user = null;
+    let isAuthenticated = false;
+
+    if (isTokenValid) {
+        user = await model.getData(isTokenValid.id);
+        isAuthenticated = !!user;
+    }
+
+    if (!isAuthenticated) {
+        cookies.delete('access_token', { path: '/' });
+
+        if (!user) {
+            const isApiRoute = currentPath.startsWith(API_ROUTE);
+            const isInitRoute = currentPath === INIT_ROUTE;
+
+            if (!isApiRoute && !isInitRoute) {
+                throw redirect(303, INIT_ROUTE);
+            }
+
+            return resolve(event);
         }
 
-        return resolve(event);
-    }
+        if (
+            PUBLIC_ROUTES.includes(currentPath) ||
+            UNAUTH_ROUTES.includes(currentPath)
+        ) {
+            return resolve(event);
+        }
 
-    const isUnauthRoute = UNAUTH_ROUTES.includes(currentPath);
-
-    if (isAuthenticated && isUnauthRoute) {
-        throw redirect(303, '/');
-    }
-
-    if (!isAuthenticated && currentPath === '/') {
         throw redirect(303, '/login');
+    }
+
+    if (UNAUTH_ROUTES.includes(currentPath)) {
+        throw redirect(303, '/');
     }
 
     return resolve(event);

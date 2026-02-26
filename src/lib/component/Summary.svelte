@@ -60,7 +60,12 @@
                 <span class="sm:flex-1 me-1">Created At</span>
                 <span>:</span>
             </div>
-            <span class="flex-1">{datePrettier(summary.timestamp)}</span>
+            <span class="flex-1">
+                {datePrettier(summary.timestamp, {
+                    date: true,
+                    time: true,
+                })}
+            </span>
         </div>
     </div>
     <div
