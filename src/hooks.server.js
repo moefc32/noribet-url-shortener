@@ -7,8 +7,12 @@ setSchema();
 
 const PUBLIC_ROUTES = [];
 const UNAUTH_ROUTES = ['/login'];
+const PUBLIC_API_ROUTES = ['/api/auth'];
 const INIT_ROUTE = '/init';
-const API_ROUTE = '/api';
+
+function isRouteMatch(routes, path) {
+    return routes.some((route) => path.startsWith(route));
+}
 
 export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
@@ -27,11 +31,10 @@ export const handle = async ({ event, resolve }) => {
 
     event.locals.lang = validLang ? lang : 'en';
 
-    let user = null;
+    let user = await model.getData(isTokenValid.id);
     let isAuthenticated = false;
 
     if (isTokenValid) {
-        user = await model.getData(isTokenValid.id);
         isAuthenticated = !!user;
     }
 
@@ -39,8 +42,9 @@ export const handle = async ({ event, resolve }) => {
         cookies.delete('access_token', { path: '/' });
 
         if (!user) {
-            const isApiRoute = currentPath.startsWith(API_ROUTE);
-            const isInitRoute = currentPath === INIT_ROUTE;
+            const isApiRoute =
+                isRouteMatch(PUBLIC_API_ROUTES, currentPath);
+            const isInitRoute = (currentPath === INIT_ROUTE);
 
             if (!isApiRoute && !isInitRoute) {
                 throw redirect(303, INIT_ROUTE);
@@ -50,8 +54,9 @@ export const handle = async ({ event, resolve }) => {
         }
 
         if (
-            PUBLIC_ROUTES.includes(currentPath) ||
-            UNAUTH_ROUTES.includes(currentPath)
+            isRouteMatch(PUBLIC_ROUTES, currentPath) ||
+            isRouteMatch(UNAUTH_ROUTES, currentPath) ||
+            isRouteMatch(PUBLIC_API_ROUTES, currentPath)
         ) {
             return resolve(event);
         }
@@ -59,7 +64,7 @@ export const handle = async ({ event, resolve }) => {
         throw redirect(303, '/login');
     }
 
-    if (UNAUTH_ROUTES.includes(currentPath)) {
+    if (isRouteMatch(UNAUTH_ROUTES, currentPath)) {
         throw redirect(303, '/');
     }
 

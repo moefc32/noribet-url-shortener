@@ -41,10 +41,10 @@ importers:
     devDependencies:
       '@sveltejs/adapter-node':
         specifier: ^5.5.4
-        version: 5.5.4(@sveltejs/kit@2.53.3(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))
+        version: 5.5.4(@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))
       '@sveltejs/kit':
-        specifier: ^2.53.3
-        version: 2.53.3(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))
+        specifier: ^2.53.4
+        version: 2.53.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))
       '@sveltejs/vite-plugin-svelte':
         specifier: ^5.1.1
         version: 5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))
@@ -466,8 +466,8 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
 
-  '@sveltejs/kit@2.53.3':
-    resolution: {integrity: sha512-tshOeBUid2v5LAblUpatIdFm5Cyykbw2EiKWOunAAX0A/oJaR7DOdC9wLR5Qqh9zUf3QUISA2m9A3suBdQSYQg==}
+  '@sveltejs/kit@2.53.4':
+    resolution: {integrity: sha512-iAIPEahFgDJJyvz8g0jP08KvqnM6JvdW8YfsygZ+pMeMvyM2zssWMltcsotETvjSZ82G3VlitgDtBIvpQSZrTA==}
     engines: {node: '>=18.13'}
     hasBin: true
     peerDependencies:
@@ -858,8 +858,8 @@ packages:
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
-  enhanced-resolve@5.19.0:
-    resolution: {integrity: sha512-phv3E1Xl4tQOShqSte26C7Fl84EwUdZsyOuSSk9qtAGyyQs2s3jJzComh+Abf4g187lUUAvH+H26omrqia2aGg==}
+  enhanced-resolve@5.20.0:
+    resolution: {integrity: sha512-/ce7+jQ1PQ6rVXwe+jKEg5hW5ciicHwIQUagZkp6IufBoY3YDgdTTY1azVs0qoRgVmvsNB+rbjLJxDAeHHtwsQ==}
     engines: {node: '>=10.13.0'}
 
   esbuild@0.25.12:
@@ -1248,8 +1248,8 @@ packages:
     deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
 
-  pump@3.0.3:
-    resolution: {integrity: sha512-todwxLMY7/heScKmntwQG8CXVkWUOdYxIvY2s0VWAAMh/nd8SoYiRaKjlr7+iCs984f2P8zvrfWcDDYVb73NfA==}
+  pump@3.0.4:
+    resolution: {integrity: sha512-VS7sjc6KR7e1ukRFhQSY5LM2uBWAUPiOPa/A3mkKmiMwSmRFUITt0xuj+/lesgnCv+dPIEYlkzrcyXgquIHMcA==}
 
   qrcode@1.5.4:
     resolution: {integrity: sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg==}
@@ -1767,15 +1767,15 @@ snapshots:
     dependencies:
       acorn: 8.16.0
 
-  '@sveltejs/adapter-node@5.5.4(@sveltejs/kit@2.53.3(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))':
+  '@sveltejs/adapter-node@5.5.4(@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))':
     dependencies:
       '@rollup/plugin-commonjs': 29.0.0(rollup@4.59.0)
       '@rollup/plugin-json': 6.1.0(rollup@4.59.0)
       '@rollup/plugin-node-resolve': 16.0.3(rollup@4.59.0)
-      '@sveltejs/kit': 2.53.3(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))
+      '@sveltejs/kit': 2.53.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))
       rollup: 4.59.0
 
-  '@sveltejs/kit@2.53.3(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))':
+  '@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0)))(svelte@5.53.6)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.7.0))':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
@@ -1818,7 +1818,7 @@ snapshots:
   '@tailwindcss/node@4.2.1':
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      enhanced-resolve: 5.19.0
+      enhanced-resolve: 5.20.0
       jiti: 2.6.1
       lightningcss: 1.31.1
       magic-string: 0.30.21
@@ -2037,7 +2037,7 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  enhanced-resolve@5.19.0:
+  enhanced-resolve@5.20.0:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.0
@@ -2414,13 +2414,13 @@ snapshots:
       mkdirp-classic: 0.5.3
       napi-build-utils: 2.0.0
       node-abi: 3.87.0
-      pump: 3.0.3
+      pump: 3.0.4
       rc: 1.2.8
       simple-get: 4.0.1
       tar-fs: 2.1.4
       tunnel-agent: 0.6.0
 
-  pump@3.0.3:
+  pump@3.0.4:
     dependencies:
       end-of-stream: 1.4.5
       once: 1.4.0
@@ -2595,7 +2595,7 @@ snapshots:
     dependencies:
       chownr: 1.1.4
       mkdirp-classic: 0.5.3
-      pump: 3.0.3
+      pump: 3.0.4
       tar-stream: 2.2.0
 
   tar-stream@2.2.0:
