@@ -31,7 +31,9 @@
 
             if (!response.ok) throw new Error();
 
-            notyf.success('Profile info updated successfully.');
+            profile.password = '';
+
+            notyf.success('Account info updated successfully.');
             goto('/', { invalidateAll: true });
             modalProfile = false;
         } catch (e) {
