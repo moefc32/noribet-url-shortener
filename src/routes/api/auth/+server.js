@@ -5,7 +5,7 @@ import {
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import { hashPassword, comparePassword } from '$lib/server/hash';
-import decodeToken from '$lib/server/token';
+import token from '$lib/server/token';
 import jwt from 'jsonwebtoken';
 import model from '$lib/server/db/model/auth';
 import isValidEmail from '$lib/isValidEmail';
@@ -41,19 +41,11 @@ export async function POST({ cookies, request }) {
             });
         }
 
-        const token = jwt.sign({
-            id: result.id,
-        },
-            VITE_JWT_SECRET, {
-            expiresIn: VITE_JWT_EXPIRATION || '1h',
-        });
+        const jwtToken = token.sign({ id: result.id },
+            VITE_JWT_EXPIRATION || '1h');
 
         const maxAge = parseMs(VITE_JWT_EXPIRATION || '1h');
-        cookies.set('access_token', token, {
-            path: '/',
-            httpOnly: true,
-            maxAge,
-        });
+        token.set(cookies, 'access_token', jwtToken, { maxAge });
 
         return json({
             application: VITE_APP_NAME,
@@ -87,8 +79,8 @@ export async function PATCH({ cookies, request }) {
     }
 
     try {
-        const access_token = await cookies.get('access_token');
-        const decoded_token = decodeToken(access_token);
+        const access_token = await cookies.get(token.access);
+        const decoded_token = token.decode(access_token);
         const isUserPresent = await model.getData(decoded_token?.id);
 
         if (!isUserPresent)
@@ -174,7 +166,7 @@ export async function PUT({ request }) {
 
 export async function DELETE({ cookies }) {
     try {
-        cookies.delete('access_token', { path: '/', });
+        token.purge(cookies, 'access_token');
 
         return json({
             application: VITE_APP_NAME,

@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { validateToken } from '$lib/server/token';
-import model from '$lib/server/db/model/auth';
 import setSchema from '$lib/server/db/init';
+import model from '$lib/server/db/model/auth';
+import token from '$lib/server/token';
 
 setSchema();
 
@@ -17,7 +17,7 @@ function isRouteMatch(routes, path) {
 export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
     const currentPath = url.pathname;
-    const isTokenValid = validateToken(cookies);
+    const isTokenValid = token.validate(cookies);
 
     const lang = cookies.get('lang');
     const validLang = lang && ['en', 'id'].includes(lang);
@@ -39,7 +39,10 @@ export const handle = async ({ event, resolve }) => {
     }
 
     if (!isAuthenticated) {
-        cookies.delete('access_token', { path: '/' });
+        token.purge(cookies, [
+            'access_token',
+            'refresh_token',
+        ]);
 
         if (!user) {
             const isApiRoute =

@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
-import decodeToken from '$lib/server/token';
+import token from '$lib/server/token';
 import modelAuth from '$lib/server/db/model/auth';
 import modelURL from '$lib/server/db/model/url';
 
@@ -17,8 +17,8 @@ export async function load({ cookies, params, request }) {
 
         if (long_url) throw redirect(302, long_url);
     } else {
-        const access_token = await cookies.get('access_token');
-        const decoded_token = decodeToken(access_token);
+        const access_token = await cookies.get(token.access);
+        const decoded_token = token.decode(access_token);
         const isUserPresent = await modelAuth.getData(decoded_token?.id);
 
         if (!access_token) throw error(404, 'Not Found');
