@@ -34,7 +34,7 @@
             profile.password = '';
 
             notyf.success('Account info updated successfully.');
-            goto('/', { invalidateAll: true });
+            await goto('/', { invalidateAll: true });
             modalProfile = false;
         } catch (e) {
             console.error(e);
@@ -54,7 +54,7 @@
             if (!response.ok) throw new Error();
 
             notyf.success('You are now logged out.');
-            goto('/login', { invalidateAll: true });
+            await goto('/login', { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Logout failed, please try again!');
