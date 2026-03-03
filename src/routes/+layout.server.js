@@ -1,7 +1,11 @@
 import model from '$lib/server/db/model/auth';
 import token from '$lib/server/token';
 
-export async function load({ cookies }) {
+export async function load({ cookies, locals }) {
+    const routes = {
+        publicRoutes: locals.publicRoutes,
+        unauthRoutes: locals.unauthRoutes,
+    };
     const access_token = cookies.get(token.access);
     const decoded_token = token.decode(access_token);
     if (!decoded_token) return;
@@ -11,6 +15,7 @@ export async function load({ cookies }) {
     if (userData) delete userData.password;
 
     return {
+        ...routes,
         userData,
     };
 }

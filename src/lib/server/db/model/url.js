@@ -37,6 +37,22 @@ export default {
             throw new Error('Error when getting data!');
         }
     },
+    validateShortUrl: async (short_url) => {
+        if (!short_url) return [];
+
+        try {
+            const result = await db
+                .select({ short_url: url.short_url })
+                .from(url)
+                .where(eq(url.short_url, short_url))
+                .limit(1);
+
+            return result;
+        } catch (e) {
+            console.error(e);
+            return [];
+        }
+    },
     getLongURL: async (data) => {
         try {
             const timestamp = Date.now();

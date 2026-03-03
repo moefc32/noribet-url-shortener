@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import setSchema from '$lib/server/db/init';
-import model from '$lib/server/db/model/auth';
+import modelAuth from '$lib/server/db/model/auth';
+import modelURL from '$lib/server/db/model/url';
 import token from '$lib/server/token';
 
 setSchema();
@@ -19,6 +20,10 @@ export const handle = async ({ event, resolve }) => {
     const currentPath = url.pathname;
     const isTokenValid = token.validate(cookies);
 
+    const isShortUrl =
+        await modelURL.validateShortUrl(currentPath.slice(1));
+    if (isShortUrl.length) return resolve(event);
+
     const lang = cookies.get('lang');
     const validLang = lang && ['en', 'id'].includes(lang);
 
@@ -30,8 +35,21 @@ export const handle = async ({ event, resolve }) => {
     }
 
     event.locals.lang = validLang ? lang : 'en';
+    event.locals.publicRoutes = PUBLIC_ROUTES;
+    event.locals.unauthRoutes = UNAUTH_ROUTES;
 
-    let user = await model.getData(isTokenValid.id);
+    if (isTokenValid) {
+        cookies.set('__session_active', '1', {
+            path: '/',
+            httpOnly: false,
+        });
+    } else {
+        cookies.delete('__session_active', {
+            path: '/',
+        });
+    }
+
+    let user = await modelAuth.getData(isTokenValid.id);
     let isAuthenticated = false;
 
     if (isTokenValid) {
