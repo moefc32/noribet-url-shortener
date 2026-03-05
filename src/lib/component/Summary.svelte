@@ -19,9 +19,9 @@
 </script>
 
 <div
-    class="card flex flex-col md:flex-row justify-start items-stretch bg-white dark:bg-gray-700 dark:text-white p-3 w-full rounded-md shadow-xl"
+    class="card flex flex-col md:flex-row justify-start items-stretch bg-gray-700 p-4 w-full rounded-md shadow-xl"
 >
-    <div class="flex flex-1 flex-col justify-start items-stretch gap-1">
+    <div class="flex flex-1 flex-col justify-start items-stretch gap-1 text-white">
         <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
             <div class="flex sm:w-[135px] pe-1">
                 <span class="sm:flex-1 me-1">Short URL</span>

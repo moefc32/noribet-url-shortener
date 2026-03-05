@@ -15,7 +15,7 @@ Noribet URL shortener application
 ## Stack Used
 - [SvelteKit](https://svelte.dev/)
 - [Tailwind](https://tailwindcss.com/)
-- [Flowbite Svelte](https://flowbite-svelte.com/)
+- [daisyUI](https://daisyui.com/)
 - [SQLite](https://www.sqlite.org/)
 
 ## Local Preview

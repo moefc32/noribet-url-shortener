@@ -1,13 +1,9 @@
 <script>
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
-    import { Modal, Button } from 'flowbite-svelte';
-    import { Key, LogOut, LogIn } from 'lucide-svelte';
+    import { Key, LogOut, Eye, EyeOff, Check } from 'lucide-svelte';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
-
-    import Login from './Login.svelte';
-    import EditAccount from './EditAccount.svelte';
 
     let modalProfile = false;
 
@@ -15,6 +11,7 @@
         email: $page.data.user_email,
         password: '',
     };
+
     let showPassword = false;
 
     async function updateProfile() {
@@ -35,7 +32,6 @@
 
             notyf.success('Account info updated successfully.');
             await goto('/', { invalidateAll: true });
-            modalProfile = false;
         } catch (e) {
             console.error(e);
             notyf.error('Update login account info failed, please try again!');
@@ -62,48 +58,84 @@
     }
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-<!-- svelte-ignore a11y_missing_attribute -->
-<header
-    class="flex items-center gap-1 bg-white dark:bg-gray-700 dark:text-white px-3 h-[60px] rounded-md shadow-xl"
->
-    <div class="flex-1">
-        <button
-            class="flex items-center gap-1 ps-10 pe-3 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px] cursor-pointer"
-            on:click={() => goto('/')}
+<header class="navbar bg-gray-700 px-3 rounded-lg shadow-xl">
+    <div class="flex">
+        <a
+            href="/"
+            class="flex items-center ps-10 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px] cursor-pointer"
         >
             {import.meta.env.VITE_APP_NAME}
-        </button>
+        </a>
     </div>
     <div class="flex gap-1 ms-auto text-[16px]">
-        <Button
-            outline
-            color="dark"
-            class="flex gap-1 px-4 py-2 cursor-pointer"
+        <button
+            class="btn btn-outline btn-sm"
             title="Edit login account"
-            on:click={() => (modalProfile = true)}
+            on:click={() => edit_profile.showModal()}
         >
             <Key size={14} />
             <span class="hidden md:inline">Edit Account</span>
-        </Button>
-        <Button
-            color="purple"
-            class="flex gap-1 px-4 py-2 cursor-pointer"
+        </button>
+        <button
+            class="btn btn-primary btn-sm"
             title="Logout from application"
             on:click={() => doLogout()}
         >
             <LogOut size={14} />
             <span class="hidden md:inline">Logout</span>
-        </Button>
+        </button>
     </div>
 </header>
 
-<Modal
-    size="xs"
-    backdropClass={'bg-black/75 fixed inset-0 z-50'}
-    bind:open={modalProfile}
-    autoclose
-    outsideclose
->
-    <EditAccount {profile} {updateProfile} />
-</Modal>
+<dialog id="edit_profile" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box max-w-[400px]">
+        <h3 class="text-lg font-bold">Edit Account</h3>
+        <div class="flex flex-col gap-2 pt-4">
+            <input
+                type="email"
+                class="input input-bordered w-full"
+                placeholder="New email"
+                bind:value={profile.email}
+                on:keydown={handleKeydown}
+            />
+            <div class="join w-full">
+                <input
+                    type={showPassword ? 'text' : 'password'}
+                    class="join-item input input-bordered w-full"
+                    placeholder="New password"
+                    bind:value={profile.password}
+                    on:keydown={handleKeydown}
+                />
+                <button
+                    type="button"
+                    class="join-item btn btn-outline border-gray-500"
+                    title={showPassword
+                        ? 'Click to hide password'
+                        : 'Click to show password'}
+                    on:click={() => (showPassword = !showPassword)}
+                >
+                    {#if showPassword}
+                        <EyeOff size={18} />
+                    {:else}
+                        <Eye size={18} />
+                    {/if}
+                </button>
+            </div>
+        </div>
+        <div class="modal-action mt-6">
+            <form method="dialog">
+                <button class="btn">Cancel</button>
+                <button
+                    class="btn btn-success"
+                    disabled={!profile.email || !isValidEmail(profile.email)}
+                    on:click={() => updateProfile()}
+                >
+                    <Check size={14} /> Save
+                </button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>

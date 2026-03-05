@@ -1,15 +1,4 @@
 <script>
-    import {
-        Table,
-        TableBody,
-        TableBodyCell,
-        TableBodyRow,
-        TableHead,
-        TableHeadCell,
-        Button,
-        Pagination,
-        PaginationItem,
-    } from 'flowbite-svelte';
     import datePrettier from '$lib/datePrettier';
 
     export let contents = [];
@@ -39,58 +28,67 @@
     $: totalPage = Math.max(1, Math.ceil(contents[0]?.clicks / 10));
 </script>
 
-<div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
-    <div class="px-3 w-full">
-        <Table striped={true} hoverable={true}>
-            <TableHead>
-                <TableHeadCell class="whitespace-nowrap">
-                    Accessed At
-                </TableHeadCell>
-                <TableHeadCell class="whitespace-nowrap">Referrer</TableHeadCell
-                >
-                <TableHeadCell class="whitespace-nowrap">
-                    User Agent
-                </TableHeadCell>
-            </TableHead>
-            <TableBody tableBodyClass="divide-y">
-                {#if !contents[0].history_timestamp}
-                    <TableBodyRow>
-                        <TableBodyCell
-                            colspan="3"
-                            class="p-6 text-center text-gray-400!"
-                        >
+<div class="card bg-gray-700 shadow-xl overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="table table-zebra">
+            <thead>
+                <tr>
+                    <th class="whitespace-nowrap">Accessed At</th>
+                    <th class="whitespace-nowrap">Referrer</th>
+                    <th class="whitespace-nowrap">User Agent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#if !contents[0]?.history_timestamp}
+                    <tr>
+                        <td colspan="3" class="text-center py-6 opacity-60">
                             - Currently no data to show -
-                        </TableBodyCell>
-                    </TableBodyRow>
+                        </td>
+                    </tr>
                 {:else}
-                    {#each contents as item, i}
-                        <TableBodyRow>
-                            <TableBodyCell class="w-[1%] whitespace-nowrap">
+                    {#each contents as item}
+                        <tr>
+                            <td class="whitespace-nowrap">
                                 {datePrettier(item.history_timestamp, {
                                     date: true,
                                     time: true,
                                 })}
-                            </TableBodyCell>
-                            <TableBodyCell>
-                                <a href={item.ref} target="_blank">{item.ref}</a
+                            </td>
+                            <td>
+                                <a
+                                    href={item.ref}
+                                    target="_blank"
+                                    class="link link-hover"
                                 >
-                            </TableBodyCell>
-                            <TableBodyCell>{item.agent}</TableBodyCell>
-                        </TableBodyRow>
+                                    {item.ref}
+                                </a>
+                            </td>
+                            <td>{item.agent}</td>
+                        </tr>
                     {/each}
                 {/if}
-            </TableBody>
-        </Table>
+            </tbody>
+        </table>
     </div>
-    <div class="flex p-3 w-full">
-        <Pagination
-            pages={[
-                {
-                    name: `${currentPage} of ${totalPage || 1}`,
-                },
-            ]}
-            on:previous={previous}
-            on:next={next}
-        />
+    <div class="p-4">
+        <div class="join border-1 border-gray-500 rounded-sm">
+            <button
+                class="join-item btn btn-sm"
+                on:click={() => previous()}
+                disabled={currentPage === 1}
+            >
+                Previous
+            </button>
+            <span class="join-item flex items-center px-3 text-sm">
+                {currentPage} of {totalPage || 1}
+            </span>
+            <button
+                class="join-item btn btn-sm"
+                on:click={() => next()}
+                disabled={currentPage === totalPage}
+            >
+                Next
+            </button>
+        </div>
     </div>
 </div>

@@ -1,30 +1,21 @@
 <script>
     import { goto } from '$app/navigation';
-    import notyf from '$lib/notyf';
     import {
-        Input,
-        Table,
-        TableBody,
-        TableBodyCell,
-        TableBodyRow,
-        TableHead,
-        TableHeadCell,
-        Button,
-        Pagination,
-        Modal,
-    } from 'flowbite-svelte';
-    import { ChartColumn, Pen, Trash2, CircleAlert } from 'lucide-svelte';
+        ChartColumn,
+        Pen,
+        Trash2,
+        CircleAlert,
+        Link,
+        Check,
+    } from 'lucide-svelte';
+    import notyf from '$lib/notyf';
     import datePrettier from '$lib/datePrettier';
-
-    import EditURL from './EditURL.svelte';
 
     export let search;
     export let doSearch;
     export let contents = [];
     export let reloadURLList;
 
-    let itemEdit = false;
-    let itemDelete = false;
     let formData = {
         id: '',
         short_url: '',
@@ -62,14 +53,14 @@
     }
 
     function openEditModal(data) {
-        itemEdit = true;
+        url_update.showModal();
         formData.id = data.id;
         formData.short_url = data.short_url;
         formData.long_url = data.long_url;
     }
 
     function openDeleteModal(id) {
-        itemDelete = true;
+        url_delete.showModal();
         formData.id = id;
     }
 
@@ -77,21 +68,14 @@
         try {
             const response = await fetch(`/api/url?id=${formData.id}`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
 
             if (!response.ok) throw new Error();
 
             notyf.success('Data saved successfully.');
-
-            const result = await response.json();
-            delete contents.is_new;
-
             await reloadURLList();
-            itemEdit = false;
         } catch (e) {
             console.error(e);
             notyf.error('Save data failed, please try again!');
@@ -102,9 +86,7 @@
         try {
             const response = await fetch(`/api/url?id=${formData.id}`, {
                 method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
             });
 
             if (!response.ok) throw new Error();
@@ -120,154 +102,175 @@
     $: {
         const totalItemCount = Number(contents[0]?.urls) || 0;
         const calculated = Math.ceil(totalItemCount / 10);
-
         totalPage = Math.max(1, isNaN(calculated) ? 1 : calculated);
     }
 </script>
 
-<div class="bg-white dark:bg-gray-700 overflow-hidden rounded-md shadow-xl">
-    <div class="flex px-3 pt-3 w-full md:max-w-80">
-        <Input
-            class="mb-3 dark:bg-gray-800"
+<div class="card bg-gray-700 shadow-xl overflow-hidden">
+    <div class="p-4 md:max-w-80">
+        <input
+            type="text"
+            class="input input-bordered w-full"
             placeholder="Search..."
-            on:input={handleKeydown}
             bind:value={search.keyword}
+            on:input={handleKeydown}
         />
     </div>
-    <div class="px-3 w-full">
-        <Table striped={true} hoverable={true}>
-            <TableHead>
-                <TableHeadCell class="whitespace-nowrap">Short</TableHeadCell>
-                <TableHeadCell class="whitespace-nowrap">
-                    Destination URL
-                </TableHeadCell>
-                <TableHeadCell class="whitespace-nowrap">Clicks</TableHeadCell>
-                <TableHeadCell class="whitespace-nowrap">
-                    Created At
-                </TableHeadCell>
-                <TableHeadCell class="whitespace-nowrap">Actions</TableHeadCell>
-            </TableHead>
-            <TableBody tableBodyClass="divide-y">
+    <div class="overflow-x-auto">
+        <table class="table table-zebra">
+            <thead>
+                <tr>
+                    <th>Short</th>
+                    <th>Destination URL</th>
+                    <th>Clicks</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
                 {#if (search.keyword && !search.results.length) || !contents.length}
-                    <TableBodyRow>
-                        <TableBodyCell
-                            colspan="5"
-                            class="p-6 text-center text-gray-400!"
-                        >
+                    <tr>
+                        <td colspan="5" class="text-center py-6 opacity-60">
                             {search.keyword
                                 ? '- No data found -'
                                 : '- Currently no data to show -'}
-                        </TableBodyCell>
-                    </TableBodyRow>
+                        </td>
+                    </tr>
                 {/if}
-                {#each search.keyword ? search.results : contents as item, i}
-                    <TableBodyRow>
-                        <TableBodyCell>
-                            <a href="/{item.short_url}" target="_blank">
+
+                {#each search.keyword ? search.results : contents as item}
+                    <tr>
+                        <td>
+                            <a
+                                href="/{item.short_url}"
+                                target="_blank"
+                                class="link link-hover"
+                            >
                                 {item.short_url}
                             </a>
-                        </TableBodyCell>
-                        <TableBodyCell>
+                        </td>
+                        <td>
                             <a
                                 href={item.long_url}
                                 target="_blank"
                                 title={item.long_url}
+                                class="link link-hover"
                             >
                                 {item.long_url}
                             </a>
-                        </TableBodyCell>
-                        <TableBodyCell>{item.clicks}</TableBodyCell>
-                        <TableBodyCell class="w-[1%] whitespace-nowrap">
+                        </td>
+                        <td>{item.clicks}</td>
+                        <td class="align-middle w-[1%] whitespace-nowrap">
                             {datePrettier(item.timestamp, {
                                 date: true,
                                 time: true,
                             })}
-                        </TableBodyCell>
-                        <TableBodyCell class="w-[1%] whitespace-nowrap">
+                        </td>
+                        <td class="align-middle w-[1%] whitespace-nowrap">
                             <div class="flex gap-1">
-                                <Button
-                                    size="sm"
-                                    color="blue"
-                                    class="flex gap-1"
-                                    title="View click statistics"
+                                <button
+                                    class="btn btn-sm btn-info"
                                     on:click={() => goto(`/${item.short_url}~`)}
                                 >
-                                    <ChartColumn size={12} />
-                                    <span class="hidden md:inline">Stats</span>
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    color="yellow"
-                                    class="flex gap-1 text-black"
-                                    title="Edit this entry"
+                                    <ChartColumn size={12} /> Stats
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-warning"
                                     on:click={() => openEditModal(item)}
                                 >
-                                    <Pen size={12} />
-                                    <span class="hidden md:inline">Edit</span>
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    color="red"
-                                    class="flex gap-1"
-                                    title="Delete this entry"
+                                    <Pen size={12} /> Edit
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-error"
                                     on:click={() => openDeleteModal(item.id)}
                                 >
-                                    <Trash2 size={12} />
-                                    <span class="hidden md:inline">Delete</span>
-                                </Button>
+                                    <Trash2 size={12} /> Delete
+                                </button>
                             </div>
-                        </TableBodyCell>
-                    </TableBodyRow>
+                        </td>
+                    </tr>
                 {/each}
-            </TableBody>
-        </Table>
+            </tbody>
+        </table>
     </div>
-    <div class="flex p-3 w-full">
-        <Pagination
-            pages={[
-                {
-                    name: `${currentPage} of ${totalPage || 1}`,
-                },
-            ]}
-            on:previous={previous}
-            on:next={next}
-        />
+    <div class="p-4">
+        <div class="join border-1 border-gray-500 rounded-sm">
+            <button
+                class="join-item btn btn-sm"
+                on:click={() => previous()}
+                disabled={currentPage === 1}
+            >
+                Previous
+            </button>
+            <span class="join-item flex items-center px-3 text-sm">
+                {currentPage} of {totalPage || 1}
+            </span>
+            <button
+                class="join-item btn btn-sm"
+                on:click={() => next()}
+                disabled={currentPage === totalPage}
+            >
+                Next
+            </button>
+        </div>
     </div>
 </div>
 
-<Modal
-    size="xs"
-    backdropClass={'bg-black/75 fixed inset-0 z-50'}
-    bind:open={itemEdit}
-    autoclose
-    outsideclose
->
-    <EditURL {formData} {editEntry} />
-</Modal>
+<dialog id="url_update" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box max-w-[400px]">
+        <h3 class="text-lg font-bold">Edit URL</h3>
+        <div class="flex flex-col gap-2 pt-4">
+            <input
+                type="text"
+                class="input input-bordered w-full"
+                placeholder="New destination URL"
+                bind:value={formData.long_url}
+                on:keydown={handleKeydown}
+            />
 
-<Modal
-    size="xs"
-    backdropClass={'bg-black/75 fixed inset-0 z-50'}
-    bind:open={itemDelete}
-    autoclose
-    outsideclose
->
-    <div class="flex flex-col gap-2">
-        <CircleAlert size={50} class="mx-auto my-3" />
-        <h3 class="mb-5 text-lg text-center">
-            Are you sure you want to delete this entry?
-        </h3>
-        <div class="flex gap-3 mt-2">
-            <Button class="flex flex-1 gap-1" color="alternative">
-                Cancel
-            </Button>
-            <Button
-                color="red"
-                class="flex flex-1 gap-1"
-                on:click={() => deleteEntry()}
-            >
-                <Trash2 size={14} /> Delete
-            </Button>
+            <input
+                type="text"
+                class="input input-bordered w-full"
+                placeholder="New short URL"
+                bind:value={formData.short_url}
+                on:keydown={handleKeydown}
+            />
+        </div>
+        <div class="modal-action mt-6">
+            <form method="dialog">
+                <button class="btn">Cancel</button>
+                <button
+                    class="btn btn-success"
+                    disabled={!formData.long_url || !formData.short_url}
+                    on:click={() => editEntry()}
+                >
+                    <Check size={14} /> Save
+                </button>
+            </form>
         </div>
     </div>
-</Modal>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<dialog id="url_delete" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Delete URL</h3>
+        <p class="py-4">Are you sure you want to delete this entry?</p>
+        <div class="modal-action mt-3">
+            <form method="dialog">
+                <button class="btn">Cancel</button>
+                <button
+                    class="btn btn-error text-white"
+                    on:click={() => deleteEntry()}
+                >
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>

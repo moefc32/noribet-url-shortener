@@ -8,7 +8,7 @@
     </title>
 </svelte:head>
 
-<div class="dark:text-white">
+<div class="text-white">
     <span>{$page.status}</span>
     <span class="divider"></span>
     <span class="text-uppercase">{$page.error.message}</span>
