@@ -1,4 +1,6 @@
 <script>
+    import ky from 'ky';
+
     import Header from '$lib/component/Header.svelte';
     import Summary from '$lib/component/Summary.svelte';
     import TableHistory from '$lib/component/TableHistory.svelte';
@@ -9,19 +11,14 @@
 
     async function reloadHistoryList(page) {
         try {
-            const response = await fetch(
-                `/api/url?page=${page}&short_url=${short_url}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
+            const result = await ky
+                .get('/api/url', {
+                    searchParams: {
+                        page,
+                        short_url,
                     },
-                },
-            );
-
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
+                })
+                .json();
 
             contents = result.data;
         } catch (e) {

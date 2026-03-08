@@ -1,4 +1,5 @@
 <script>
+    import ky from 'ky';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
@@ -18,16 +19,12 @@
 
     async function reloadURLList(page = 1) {
         try {
-            const response = await fetch(`/api/url?page=${page}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const result = await ky
+                .get('/api/url', {
+                    searchParams: { page },
+                })
+                .json();
 
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
             contents = result.data;
         } catch (e) {
             console.error(e);
@@ -38,22 +35,19 @@
         search.loading = true;
 
         try {
-            const response = await fetch(`/api/url?s=${search.keyword}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const result = await ky
+                .get('/api/url', {
+                    searchParams: {
+                        s: search.keyword,
+                    },
+                })
+                .json();
 
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
             search.results = result.data;
-            search.loading = false;
         } catch (e) {
-            search.loading = false;
-
             console.error(e);
+        } finally {
+            search.loading = false;
         }
     }
 </script>

@@ -2,6 +2,7 @@
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
     import { Key, LogOut, Eye, EyeOff, Check } from 'lucide-svelte';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
@@ -18,15 +19,9 @@
         try {
             if (!isValidEmail(profile.email)) throw new Error();
 
-            const response = await fetch('/api/auth', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(profile),
+            await ky.patch('/api/auth', {
+                json: profile,
             });
-
-            if (!response.ok) throw new Error();
 
             profile.password = '';
 
@@ -40,14 +35,7 @@
 
     async function doLogout() {
         try {
-            const response = await fetch('/api/auth', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) throw new Error();
+            await ky.delete('/api/auth');
 
             notyf.success('You are now logged out.');
             await goto('/login', { invalidateAll: true });

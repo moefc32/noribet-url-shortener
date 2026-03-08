@@ -1,6 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
     import { Eye, EyeOff, Check } from 'lucide-svelte';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
@@ -23,15 +24,9 @@
             register.loading = true;
             if (!isValidEmail(register.email)) throw new Error();
 
-            const response = await fetch('/api/auth', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(register),
+            await ky.put('/api/auth', {
+                json: register,
             });
-
-            if (!response.ok) throw new Error();
 
             notyf.success('Site initialization completed, you may now log in.');
             await goto('/login', { invalidateAll: true });
