@@ -1,6 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
     import { Eye, EyeOff, LogIn } from 'lucide-svelte';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
@@ -23,20 +24,15 @@
             login.loading = true;
             if (!isValidEmail(login.email)) throw new Error();
 
-            const response = await fetch('/api/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(login),
+            await ky.post('/api/auth', {
+                json: login,
             });
-
-            if (!response.ok) throw new Error();
 
             notyf.success('You have successfully logged in.');
             await goto('/', { invalidateAll: true });
         } catch (e) {
             login.loading = false;
+
             console.error(e);
             notyf.error('Login failed, please check all data and try again!');
         }

@@ -19,7 +19,7 @@
 </script>
 
 <div
-    class="card flex flex-col md:flex-row justify-start items-stretch bg-gray-700 p-4 w-full rounded-md shadow-xl"
+    class="card flex flex-col md:flex-row justify-start items-stretch bg-gray-700 p-4 w-full shadow-xl"
 >
     <div class="flex flex-1 flex-col justify-start items-stretch gap-1 text-white">
         <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">

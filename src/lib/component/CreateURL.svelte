@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { Check } from 'lucide-svelte';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
     import isValidShortURL from '$lib/isValidShortURL';
 
@@ -28,27 +29,21 @@
         try {
             formData.loading = true;
 
-            const response = await fetch('/api/url', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+            await ky.post('/api/url', {
+                json: formData,
             });
 
-            if (!response.ok) throw new Error();
-
             await reloadURLList();
+
             formData.long_url = '';
             formData.short_url = '';
-            formData.loading = false;
 
             notyf.success('New short URL created successfully.');
         } catch (e) {
-            formData.loading = false;
-
             console.error(e);
             notyf.error('Cannot create short URL, please try again!');
+        } finally {
+            formData.loading = false;
         }
     }
 
@@ -58,7 +53,7 @@
 </script>
 
 <div
-    class="card flex flex-col md:flex-row justify-start items-stretch bg-gray-700 p-4 w-full rounded-md shadow-xl"
+    class="card flex flex-col md:flex-row justify-start items-stretch bg-gray-700 p-4 w-full shadow-xl"
 >
     <div class="flex flex-col items-center gap-3 w-full">
         <input

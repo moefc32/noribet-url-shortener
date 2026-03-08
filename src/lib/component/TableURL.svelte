@@ -8,6 +8,7 @@
         Link,
         Check,
     } from 'lucide-svelte';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
     import datePrettier from '$lib/datePrettier';
 
@@ -66,13 +67,10 @@
 
     async function editEntry() {
         try {
-            const response = await fetch(`/api/url?id=${formData.id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+            await ky.patch('/api/url', {
+                searchParams: { id: formData.id },
+                json: formData,
             });
-
-            if (!response.ok) throw new Error();
 
             notyf.success('Data saved successfully.');
             await reloadURLList();
@@ -84,12 +82,9 @@
 
     async function deleteEntry() {
         try {
-            const response = await fetch(`/api/url?id=${formData.id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+            await ky.delete('/api/url', {
+                searchParams: { id: formData.id },
             });
-
-            if (!response.ok) throw new Error();
 
             notyf.success('Data deleted successfully.');
             await reloadURLList();
