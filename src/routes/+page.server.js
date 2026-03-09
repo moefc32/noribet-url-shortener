@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import token from '$lib/server/token';
 import modelAuth from '$lib/server/db/model/auth';
 import modelURL from '$lib/server/db/model/url';

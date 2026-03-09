@@ -8,7 +8,7 @@
     </title>
 </svelte:head>
 
-<div class="text-white">
+<div>
     <span>{$page.status}</span>
     <span class="divider"></span>
     <span class="text-uppercase">{$page.error.message}</span>
@@ -17,10 +17,10 @@
 <style>
     div {
         display: flex;
+        flex-grow: 1;
         justify-content: center;
         align-items: center;
         width: 100%;
-        min-height: 100dvh;
         padding: 50px;
     }
 
