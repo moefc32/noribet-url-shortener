@@ -93,7 +93,7 @@
                 on:click={() => doRegister()}
             >
                 {#if register.loading}
-                    <span class="loading loading-spinner loading-sm"></span>
+                    <span class="loading loading-spinner loading-xs"></span>
                     Loading...
                 {:else}
                     <Check size={14} /> Register

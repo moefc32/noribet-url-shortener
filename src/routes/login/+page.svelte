@@ -88,7 +88,7 @@
                 on:click={() => doLogin()}
             >
                 {#if login.loading}
-                    <span class="loading loading-spinner loading-sm"></span>
+                    <span class="loading loading-spinner loading-xs"></span>
                     Loading...
                 {:else}
                     <LogIn size={14} /> Login
