@@ -13,25 +13,33 @@ export async function load({ cookies, params, request }) {
             ref: request.headers.get('referer'),
             agent: request.headers.get('user-agent'),
         })
-        const long_url = response[0]?.long_url;
+
+        const long_url = response?.[0]?.long_url;
 
         if (long_url) throw redirect(302, long_url);
+        throw error(404);
     } else {
         const access_token = await cookies.get(token.access);
-        const decoded_token = token.decode(access_token);
-        const isUserPresent = await modelAuth.getData(decoded_token?.id);
 
-        if (!access_token) throw error(404, 'Not Found');
+        if (access_token) {
+            const decoded_token = token.decode(access_token);
+            const isUserPresent = await modelAuth.getData(decoded_token?.id);
 
-        const response = await modelURL.getData(short_url.replace(/~$/, ''));
+            const clean_short = short_url.replace(/~$/, '');
+            const response = await modelURL.getData(clean_short);
 
-        return {
-            access_token,
-            user_email: isUserPresent?.email,
-            contents: {
-                short_url: short_url.replace(/~$/, ""),
-                contents: response,
-            },
-        };
+            if (response.length) {
+                return {
+                    access_token,
+                    user_email: isUserPresent?.email,
+                    contents: {
+                        short_url: short_url.replace(/~$/, ""),
+                        contents: response,
+                    },
+                };
+            }
+
+            throw error(404);
+        }
     }
 }

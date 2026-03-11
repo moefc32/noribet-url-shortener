@@ -13,10 +13,8 @@
             const path = window.location.pathname;
 
             const isAuth = data.unauthRoutes.some(r => path.startsWith(r));
-            const isPublic = data.publicRoutes.some(r => path.startsWith(r));
-            const isProtected = !isAuth && !isPublic;
 
-            if ((isProtected && !hasSession) || (isAuth && hasSession)) {
+            if ((!isAuth && !hasSession) || (isAuth && hasSession)) {
                 window.location.reload();
             }
         }
