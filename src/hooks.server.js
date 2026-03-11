@@ -17,66 +17,78 @@ function isRouteMatch(routes, path) {
 export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
     const currentPath = url.pathname;
-    const isTokenValid = token.validate(cookies);
 
-    const isShortUrl =
-        await modelURL.validateShortUrl(currentPath.slice(1));
-    if (isShortUrl.length) return resolve(event);
+    try {
+        const isTokenValid = token.validate(cookies);
 
-    const lang = cookies.get('lang');
-    const validLang = lang && ['en', 'id'].includes(lang);
+        const isShortUrl =
+            await modelURL.validateShortUrl(currentPath.slice(1));
+        if (isShortUrl.length) return resolve(event);
 
-    if (!validLang) {
-        cookies.set('lang', 'en', {
-            path: '/',
-            httpOnly: true,
-        });
-    }
+        const lang = cookies.get('lang');
+        const validLang = lang && ['en', 'id'].includes(lang);
 
-    event.locals.lang = validLang ? lang : 'en';
-    event.locals.unauthRoutes = UNAUTH_ROUTES;
-
-    if (isTokenValid) {
-        cookies.set('__session_active', '1', {
-            path: '/',
-            httpOnly: false,
-        });
-    } else {
-        cookies.delete('__session_active', {
-            path: '/',
-        });
-    }
-
-    let user = await modelAuth.getData(isTokenValid.id);
-    let isAuthenticated = false;
-
-    if (isTokenValid) {
-        isAuthenticated = !!user;
-    }
-
-    if (!isAuthenticated) {
-        token.purge(cookies, [
-            'access_token',
-            'refresh_token',
-        ]);
-
-        if (!user && !(currentPath === INIT_ROUTE)) {
-            throw redirect(303, INIT_ROUTE);
+        if (!validLang) {
+            cookies.set('lang', 'en', {
+                path: '/',
+                httpOnly: true,
+            });
         }
 
-        if (
-            currentPath !== '/' ||
-            isRouteMatch(PRIVATE_ROUTES, currentPath)
-        ) {
-            return resolve(event);
+        event.locals.lang = validLang ? lang : 'en';
+        event.locals.unauthRoutes = UNAUTH_ROUTES;
+
+        if (isTokenValid) {
+            cookies.set('__session_active', '1', {
+                path: '/',
+                httpOnly: false,
+            });
+        } else {
+            cookies.delete('__session_active', {
+                path: '/',
+            });
         }
 
-        throw redirect(303, '/login');
-    }
+        let user = await modelAuth.getData(isTokenValid.id);
+        let isAuthenticated = false;
 
-    if (isRouteMatch(UNAUTH_ROUTES, currentPath)) {
-        throw redirect(303, '/');
-    }
+        if (isTokenValid) {
+            isAuthenticated = !!user;
+        }
 
-    return resolve(event);
+        if (!isAuthenticated) {
+            token.purge(cookies, [
+                'access_token',
+                'refresh_token',
+            ]);
+
+            if (!user && !(currentPath === INIT_ROUTE)) {
+                throw redirect(303, INIT_ROUTE);
+            }
+
+            if (
+                currentPath !== '/' ||
+                isRouteMatch(PRIVATE_ROUTES, currentPath)
+            ) {
+                return resolve(event);
+            }
+
+            throw redirect(303, '/login');
+        }
+
+        if (isRouteMatch(UNAUTH_ROUTES, currentPath)) {
+            throw redirect(303, '/');
+        }
+
+        return resolve(event);
+    } catch (e) {
+        if (e.status && e.status >= 300 && e.status < 400) {
+            throw e;
+        }
+
+        console.error('\n--- CRITICAL HOOK ERROR ---\n');
+        console.error(e);
+
+        return await resolve(event);
+    }
 };
