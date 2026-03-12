@@ -29,8 +29,8 @@
         "jsonwebtoken": "^9.0.3",
         "ky": "^1.14.3",
         "lucide-svelte": "^0.563.0",
-        "notyf": "^3.10.0",
-        "qrcode": "^1.5.4"
+        "qrcode": "^1.5.4",
+        "svelte-sonner": "^1.1.0"
     },
     "pnpm": {
         "onlyBuiltDependencies": [

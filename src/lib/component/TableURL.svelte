@@ -8,8 +8,8 @@
         Link,
         Check,
     } from 'lucide-svelte';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
     import datePrettier from '$lib/datePrettier';
 
     export let search;
@@ -72,11 +72,11 @@
                 json: formData,
             });
 
-            notyf.success('Data saved successfully.');
+            toast.success('Data saved successfully.');
             await reloadURLList();
         } catch (e) {
             console.error(e);
-            notyf.error('Save data failed, please try again!');
+            toast.error('Save data failed, please try again!');
         }
     }
 
@@ -86,11 +86,11 @@
                 searchParams: { id: formData.id },
             });
 
-            notyf.success('Data deleted successfully.');
+            toast.success('Data deleted successfully.');
             await reloadURLList();
         } catch (e) {
             console.error(e);
-            notyf.error('Delete data failed, please try again!');
+            toast.error('Delete data failed, please try again!');
         }
     }
 

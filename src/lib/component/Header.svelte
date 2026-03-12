@@ -2,8 +2,8 @@
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
     import { Key, LogOut, Eye, EyeOff, Check } from 'lucide-svelte';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
     let modalProfile = false;
@@ -25,11 +25,11 @@
 
             profile.password = '';
 
-            notyf.success('Account info updated successfully.');
+            toast.success('Account info updated successfully.');
             await goto('/', { invalidateAll: true });
         } catch (e) {
             console.error(e);
-            notyf.error('Update login account info failed, please try again!');
+            toast.error('Update login account info failed, please try again!');
         }
     }
 
@@ -37,11 +37,11 @@
         try {
             await ky.delete('/api/auth');
 
-            notyf.success('You are now logged out.');
+            toast.success('You are now logged out.');
             await goto('/login', { invalidateAll: true });
         } catch (e) {
             console.error(e);
-            notyf.error('Logout failed, please try again!');
+            toast.error('Logout failed, please try again!');
         }
     }
 </script>

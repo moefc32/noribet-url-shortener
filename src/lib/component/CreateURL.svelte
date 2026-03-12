@@ -2,8 +2,8 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { Check } from 'lucide-svelte';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
     import isValidShortURL from '$lib/isValidShortURL';
 
     export let reloadURLList;
@@ -38,10 +38,10 @@
             formData.long_url = '';
             formData.short_url = '';
 
-            notyf.success('New short URL created successfully.');
+            toast.success('New short URL created successfully.');
         } catch (e) {
             console.error(e);
-            notyf.error('Cannot create short URL, please try again!');
+            toast.error('Cannot create short URL, please try again!');
         } finally {
             formData.loading = false;
         }

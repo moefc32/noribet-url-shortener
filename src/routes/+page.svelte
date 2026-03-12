@@ -1,6 +1,5 @@
 <script>
     import ky from 'ky';
-    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
     import Header from '$lib/component/Header.svelte';

@@ -1,7 +1,7 @@
 <script>
     import '../app.css';
-    import 'notyf/notyf.min.css';
     import { onMount } from 'svelte';
+    import { Toaster } from 'svelte-sonner';
 
     export let data;
 
@@ -34,3 +34,12 @@
 </svelte:head>
 
 <slot />
+
+<Toaster
+    richColors
+    theme="system"
+    position="bottom-right"
+    toastOptions={{
+        style: 'font-size: 1rem;',
+    }}
+/>

@@ -1,8 +1,8 @@
 <script>
     import { goto } from '$app/navigation';
     import { Eye, EyeOff, Check } from 'lucide-svelte';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
     let register = {
@@ -28,12 +28,12 @@
                 json: register,
             });
 
-            notyf.success('Site initialization completed, you may now log in.');
+            toast.success('Site initialization completed, you may now log in.');
             await goto('/login', { invalidateAll: true });
         } catch (e) {
             register.loading = false;
             console.error(e);
-            notyf.error(
+            toast.error(
                 'Register failed, please check all data and try again!',
             );
         }

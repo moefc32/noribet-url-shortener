@@ -1,8 +1,8 @@
 <script>
     import { goto } from '$app/navigation';
     import { Eye, EyeOff, LogIn } from 'lucide-svelte';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
     import isValidEmail from '$lib/isValidEmail';
 
     let login = {
@@ -28,13 +28,13 @@
                 json: login,
             });
 
-            notyf.success('You have successfully logged in.');
+            toast.success('You have successfully logged in.');
             await goto('/', { invalidateAll: true });
         } catch (e) {
             login.loading = false;
 
             console.error(e);
-            notyf.error('Login failed, please check all data and try again!');
+            toast.error('Login failed, please check all data and try again!');
         }
     }
 </script>
