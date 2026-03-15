@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
-export const auth = sqliteTable('auth', {
+export const Users = sqliteTable('Users', {
 	id: text('id')
 		.primaryKey()
 		.default(sql`lower(hex(randomblob(16)))`),
@@ -9,7 +9,7 @@ export const auth = sqliteTable('auth', {
 	password: text('password').notNull(),
 });
 
-export const url = sqliteTable('url', {
+export const Urls = sqliteTable('Urls', {
 	id: text('id')
 		.primaryKey()
 		.default(sql`lower(hex(randomblob(16)))`),
@@ -18,13 +18,13 @@ export const url = sqliteTable('url', {
 	timestamp: integer('timestamp').notNull(),
 });
 
-export const history = sqliteTable('history', {
+export const Histories = sqliteTable('Histories', {
 	id: text('id')
 		.primaryKey()
 		.default(sql`lower(hex(randomblob(16)))`),
 	url_id: text('url_id')
 		.notNull()
-		.references(() => url.id, { onDelete: 'cascade' }),
+		.references(() => Urls.id, { onDelete: 'cascade' }),
 	ref: text('ref'),
 	agent: text('agent'),
 	timestamp: integer('timestamp').notNull(),

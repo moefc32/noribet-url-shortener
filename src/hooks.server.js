@@ -6,8 +6,9 @@ import token from '$lib/server/token';
 
 setSchema();
 
-const PRIVATE_ROUTES = ['/api/auth'];
+const PUBLIC_ROUTES = [];
 const UNAUTH_ROUTES = ['/login'];
+const PUBLIC_API_ROUTES = ['/api/auth'];
 const INIT_ROUTE = '/init';
 
 function isRouteMatch(routes, path) {
@@ -36,6 +37,7 @@ export const handle = async ({ event, resolve }) => {
         }
 
         event.locals.lang = validLang ? lang : 'en';
+        event.locals.publicRoutes = PUBLIC_ROUTES;
         event.locals.unauthRoutes = UNAUTH_ROUTES;
 
         if (isTokenValid) {
@@ -62,13 +64,22 @@ export const handle = async ({ event, resolve }) => {
                 'refresh_token',
             ]);
 
-            if (!user && !(currentPath === INIT_ROUTE)) {
-                throw redirect(303, INIT_ROUTE);
+            if (!user) {
+                const isApiRoute =
+                    isRouteMatch(PUBLIC_API_ROUTES, currentPath);
+                const isInitRoute = (currentPath === INIT_ROUTE);
+
+                if (!isApiRoute && !isInitRoute) {
+                    throw redirect(303, INIT_ROUTE);
+                }
+
+                return resolve(event);
             }
 
             if (
-                currentPath !== '/' ||
-                isRouteMatch(PRIVATE_ROUTES, currentPath)
+                isRouteMatch(PUBLIC_ROUTES, currentPath) ||
+                isRouteMatch(UNAUTH_ROUTES, currentPath) ||
+                isRouteMatch(PUBLIC_API_ROUTES, currentPath)
             ) {
                 return resolve(event);
             }

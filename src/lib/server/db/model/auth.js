@@ -1,23 +1,23 @@
 import { eq, or } from 'drizzle-orm';
 import { db } from '../drizzle';
-import { auth } from '../schema';
+import { Users } from '../schema';
 
 export default {
     getData: async (data) => {
         try {
             const query = db
                 .select({
-                    id: auth.id,
-                    email: auth.email,
-                    password: auth.password,
+                    id: Users.id,
+                    email: Users.email,
+                    password: Users.password,
                 })
-                .from(auth);
+                .from(Users);
 
             if (data) {
                 query.where(
                     or(
-                        eq(auth.id, data),
-                        eq(auth.email, data)
+                        eq(Users.id, data),
+                        eq(Users.email, data)
                     )
                 );
             }
@@ -33,7 +33,7 @@ export default {
     },
     createData: async (data) => {
         try {
-            const result = await db.insert(auth).values({
+            const result = await db.insert(Users).values({
                 email: data.email,
                 password: data.password,
             }).returning();
@@ -46,12 +46,12 @@ export default {
     },
     editData: async (data, id) => {
         try {
-            const result = await db.update(auth)
+            const result = await db.update(Users)
                 .set({
                     email: data.email ?? undefined,
                     password: data.password ?? undefined,
                 })
-                .where(eq(auth.id, id))
+                .where(eq(Users.id, id))
                 .returning();
 
             return result;

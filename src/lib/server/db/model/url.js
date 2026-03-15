@@ -1,6 +1,6 @@
 import { eq, like, desc, sql } from 'drizzle-orm';
 import { db } from '../drizzle';
-import { url, history } from '../schema';
+import { Urls, Histories } from '../schema';
 
 export default {
     searchData: async (keyword, limit = 10, offset = 0) => {
@@ -9,25 +9,25 @@ export default {
 
             const result = await db
                 .select({
-                    id: url.id,
-                    short_url: url.short_url,
-                    long_url: url.long_url,
-                    clicks: sql`COUNT(${history.url_id})`,
-                    timestamp: url.timestamp,
+                    id: Urls.id,
+                    short_url: Urls.short_url,
+                    long_url: Urls.long_url,
+                    clicks: sql`COUNT(${Histories.url_id})`,
+                    timestamp: Urls.timestamp,
                 })
-                .from(url)
-                .leftJoin(history, eq(url.id, history.url_id))
+                .from(Urls)
+                .leftJoin(Histories, eq(Urls.id, Histories.url_id))
                 .where(
-                    sql`LOWER(${url.short_url}) LIKE LOWER(${search})
-                        OR LOWER(${url.long_url}) LIKE LOWER(${search})`
+                    sql`LOWER(${Urls.short_url}) LIKE LOWER(${search})
+                        OR LOWER(${Urls.long_url}) LIKE LOWER(${search})`
                 )
                 .groupBy(
-                    url.id,
-                    url.short_url,
-                    url.long_url,
-                    url.timestamp
+                    Urls.id,
+                    Urls.short_url,
+                    Urls.long_url,
+                    Urls.timestamp
                 )
-                .orderBy(desc(sql`COALESCE(${history.timestamp}, 0)`))
+                .orderBy(desc(sql`COALESCE(${Histories.timestamp}, 0)`))
                 .limit(limit)
                 .offset(offset);
 
@@ -42,9 +42,9 @@ export default {
 
         try {
             const result = await db
-                .select({ short_url: url.short_url })
-                .from(url)
-                .where(eq(url.short_url, short_url))
+                .select({ short_url: Urls.short_url })
+                .from(Urls)
+                .where(eq(Urls.short_url, short_url))
                 .limit(1);
 
             return result;
@@ -59,14 +59,14 @@ export default {
 
             const result = await db
                 .select({
-                    id: url.id,
-                    long_url: url.long_url,
+                    id: Urls.id,
+                    long_url: Urls.long_url,
                 })
-                .from(url)
-                .where(eq(url.short_url, data.short_url));
+                .from(Urls)
+                .where(eq(Urls.short_url, data.short_url));
 
             if (result?.length) {
-                await db.insert(history).values({
+                await db.insert(Histories).values({
                     url_id: result[0].id,
                     ref: data.ref,
                     agent: data.agent,
@@ -85,39 +85,39 @@ export default {
             const result = short_url
                 ? await db
                     .select({
-                        id: url.id,
-                        short_url: url.short_url,
-                        long_url: url.long_url,
-                        clicks: sql`COUNT(${history.url_id}) OVER()`,
-                        timestamp: url.timestamp,
-                        ref: history.ref,
-                        agent: history.agent,
-                        history_timestamp: history.timestamp,
+                        id: Urls.id,
+                        short_url: Urls.short_url,
+                        long_url: Urls.long_url,
+                        clicks: sql`COUNT(${Histories.url_id}) OVER()`,
+                        timestamp: Urls.timestamp,
+                        ref: Histories.ref,
+                        agent: Histories.agent,
+                        history_timestamp: Histories.timestamp,
                     })
-                    .from(url)
-                    .leftJoin(history, eq(url.id, history.url_id))
-                    .where(eq(url.short_url, short_url))
-                    .orderBy(desc(sql`COALESCE(${history.timestamp}, 0)`))
+                    .from(Urls)
+                    .leftJoin(Histories, eq(Urls.id, Histories.url_id))
+                    .where(eq(Urls.short_url, short_url))
+                    .orderBy(desc(sql`COALESCE(${Histories.timestamp}, 0)`))
                     .limit(limit)
                     .offset(offset)
                 : await db
                     .select({
-                        urls: sql`COUNT(${url.id}) OVER()`,
-                        id: url.id,
-                        short_url: url.short_url,
-                        long_url: url.long_url,
-                        clicks: sql`COUNT(${history.url_id})`,
-                        timestamp: url.timestamp,
+                        urls: sql`COUNT(${Urls.id}) OVER()`,
+                        id: Urls.id,
+                        short_url: Urls.short_url,
+                        long_url: Urls.long_url,
+                        clicks: sql`COUNT(${Histories.url_id})`,
+                        timestamp: Urls.timestamp,
                     })
-                    .from(url)
-                    .leftJoin(history, eq(url.id, history.url_id))
+                    .from(Urls)
+                    .leftJoin(Histories, eq(Urls.id, Histories.url_id))
                     .groupBy(
-                        url.id,
-                        url.short_url,
-                        url.long_url,
-                        url.timestamp
+                        Urls.id,
+                        Urls.short_url,
+                        Urls.long_url,
+                        Urls.timestamp
                     )
-                    .orderBy(desc(url.timestamp))
+                    .orderBy(desc(Urls.timestamp))
                     .limit(limit)
                     .offset(offset);
 
@@ -131,7 +131,7 @@ export default {
         try {
             const timestamp = Date.now();
 
-            const result = await db.insert(url)
+            const result = await db.insert(Urls)
                 .values({
                     short_url: data.short_url,
                     long_url: data.long_url,
@@ -154,12 +154,12 @@ export default {
     },
     editData: async (data, id) => {
         try {
-            const result = await db.update(url)
+            const result = await db.update(Urls)
                 .set({
                     short_url: data.short_url ?? undefined,
                     long_url: data.long_url ?? undefined,
                 })
-                .where(eq(url.id, id))
+                .where(eq(Urls.id, id))
                 .returning();
 
             return {
@@ -177,8 +177,8 @@ export default {
     },
     deleteData: async (id) => {
         try {
-            const result = await db.delete(url)
-                .where(eq(url.id, id));
+            const result = await db.delete(Urls)
+                .where(eq(Urls.id, id));
 
             return result;
         } catch (e) {
