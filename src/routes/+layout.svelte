@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     import { Toaster } from 'svelte-sonner';
 
-    export let data;
+    let { children, data } = $props();
 
     onMount(() => {
         function handleBfcache(event) {
@@ -33,7 +33,7 @@
     </title>
 </svelte:head>
 
-<slot />
+{@render children()}
 
 <Toaster
     richColors
