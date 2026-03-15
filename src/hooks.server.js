@@ -6,7 +6,6 @@ import token from '$lib/server/token';
 
 setSchema();
 
-const PUBLIC_ROUTES = [];
 const UNAUTH_ROUTES = ['/login'];
 const PUBLIC_API_ROUTES = ['/api/auth'];
 const INIT_ROUTE = '/init';
@@ -22,10 +21,6 @@ export const handle = async ({ event, resolve }) => {
     try {
         const isTokenValid = token.validate(cookies);
 
-        const isShortUrl =
-            await modelURL.validateShortUrl(currentPath.slice(1));
-        if (isShortUrl.length) return resolve(event);
-
         const lang = cookies.get('lang');
         const validLang = lang && ['en', 'id'].includes(lang);
 
@@ -37,7 +32,6 @@ export const handle = async ({ event, resolve }) => {
         }
 
         event.locals.lang = validLang ? lang : 'en';
-        event.locals.publicRoutes = PUBLIC_ROUTES;
         event.locals.unauthRoutes = UNAUTH_ROUTES;
 
         if (isTokenValid) {
@@ -76,19 +70,13 @@ export const handle = async ({ event, resolve }) => {
                 return resolve(event);
             }
 
-            if (
-                isRouteMatch(PUBLIC_ROUTES, currentPath) ||
-                isRouteMatch(UNAUTH_ROUTES, currentPath) ||
-                isRouteMatch(PUBLIC_API_ROUTES, currentPath)
-            ) {
-                return resolve(event);
+            if (currentPath === '/') {
+                throw redirect(303, '/login');
             }
-
-            throw redirect(303, '/login');
-        }
-
-        if (isRouteMatch(UNAUTH_ROUTES, currentPath)) {
-            throw redirect(303, '/');
+        } else {
+            if (isRouteMatch(UNAUTH_ROUTES, currentPath)) {
+                throw redirect(303, '/');
+            }
         }
 
         return resolve(event);

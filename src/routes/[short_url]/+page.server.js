@@ -18,28 +18,30 @@ export async function load({ cookies, params, request }) {
 
         if (long_url) throw redirect(302, long_url);
         throw error(404);
-    } else {
-        const access_token = await cookies.get(token.access);
+    }
 
-        if (access_token) {
-            const decoded_token = token.decode(access_token);
-            const isUserPresent = await modelAuth.getData(decoded_token?.id);
+    const access_token = await cookies.get(token.access);
 
-            const clean_short = short_url.replace(/~$/, '');
-            const response = await modelURL.getData(clean_short);
+    if (access_token) {
+        const decoded_token = token.decode(access_token);
+        const clean_short = short_url.slice(0, -1);
 
-            if (response.length) {
-                return {
-                    access_token,
-                    user_email: isUserPresent?.email,
-                    contents: {
-                        short_url: short_url.replace(/~$/, ""),
-                        contents: response,
-                    },
-                };
-            }
+        const [user, data] = await Promise.all([
+            modelAuth.getData(decoded_token?.id),
+            modelURL.getData(clean_short),
+        ]);
 
-            throw error(404);
+        if (data.length) {
+            return {
+                access_token,
+                user_email: user?.email,
+                contents: {
+                    short_url: clean_short,
+                    contents: data,
+                },
+            };
         }
     }
+
+    throw error(404);
 }
