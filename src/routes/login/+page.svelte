@@ -40,7 +40,7 @@
 </script>
 
 <main class="flex flex-1 justify-center items-center p-6">
-    <div class="card bg-gray-700 shadow-xl w-full max-w-[320px]">
+    <div class="card bg-gray-700 shadow-xl w-full max-w-80">
         <div class="card-body flex flex-col gap-3">
             <h1 class="text-3xl text-center">
                 {import.meta.env.VITE_APP_NAME}

@@ -50,12 +50,12 @@
     <div class="flex">
         <a
             href="/"
-            class="flex items-center ps-10 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px] cursor-pointer"
+            class="flex items-center ps-10 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-8 cursor-pointer"
         >
             {import.meta.env.VITE_APP_NAME}
         </a>
     </div>
-    <div class="flex gap-1 ms-auto text-[16px]">
+    <div class="flex gap-1 ms-auto">
         <button
             class="btn btn-outline btn-sm"
             title="Edit login account"
@@ -76,7 +76,7 @@
 </header>
 
 <dialog id="edit_profile" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box max-w-[400px]">
+    <div class="modal-box max-w-100">
         <h3 class="text-lg font-bold">Edit Account</h3>
         <div class="flex flex-col gap-2 pt-4">
             <input

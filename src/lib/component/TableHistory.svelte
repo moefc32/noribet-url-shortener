@@ -42,7 +42,7 @@
                 {#if !contents[0]?.history_timestamp}
                     <tr>
                         <td colspan="3" class="text-center py-6 opacity-60">
-                            - Currently no data to show -
+                            - There is currently no data to show -
                         </td>
                     </tr>
                 {:else}

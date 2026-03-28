@@ -128,7 +128,7 @@
                         <td colspan="5" class="text-center py-6 opacity-60">
                             {search.keyword
                                 ? '- No data found -'
-                                : '- Currently no data to show -'}
+                                : '- There is currently no data to show -'}
                         </td>
                     </tr>
                 {/if}
@@ -212,7 +212,7 @@
 </div>
 
 <dialog id="url_update" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box max-w-[400px]">
+    <div class="modal-box max-w-100">
         <h3 class="text-lg font-bold">Edit URL</h3>
         <div class="flex flex-col gap-2 pt-4">
             <input

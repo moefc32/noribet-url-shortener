@@ -28,7 +28,7 @@ export async function load({ cookies, params, request }) {
 
         const [user, data] = await Promise.all([
             modelAuth.getData(decoded_token?.id),
-            modelURL.getData(clean_short),
+            modelURL.getData(clean_short)
         ]);
 
         if (data.length) {

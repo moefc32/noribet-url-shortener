@@ -23,7 +23,7 @@
 >
     <div class="flex flex-1 flex-col justify-start items-stretch gap-1 text-white">
         <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
-            <div class="flex sm:w-[135px] pe-1">
+            <div class="flex sm:w-36 pe-1">
                 <span class="sm:flex-1 me-1">Short URL</span>
                 <span>:</span>
             </div>
@@ -34,7 +34,7 @@
             </span>
         </div>
         <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
-            <div class="flex sm:w-[135px] pe-1">
+            <div class="flex sm:w-36 pe-1">
                 <span class="sm:flex-1 me-1">Destination URL</span>
                 <span>:</span>
             </div>
@@ -49,14 +49,14 @@
             </span>
         </div>
         <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
-            <div class="flex sm:w-[135px] pe-1">
+            <div class="flex sm:w-36 pe-1">
                 <span class="sm:flex-1 me-1">Total Clicks</span>
                 <span>:</span>
             </div>
             <span class="flex-1">{summary.clicks}</span>
         </div>
         <div class="flex flex-col sm:flex-row mt-2 sm:mt-0">
-            <div class="flex sm:w-[135px] pe-1">
+            <div class="flex sm:w-36 pe-1">
                 <span class="sm:flex-1 me-1">Created At</span>
                 <span>:</span>
             </div>
@@ -69,7 +69,7 @@
         </div>
     </div>
     <div
-        class="w-[120px] h-[120px] mt-6 md:mt-0 bg-gray-300 rounded-sm overflow-hidden"
+        class="w-30 h-30 mt-6 md:mt-0 bg-gray-300 rounded-sm overflow-hidden"
     >
         <img src={qrSrc} class="w-full" alt="Short URL's QR code" />
     </div>
