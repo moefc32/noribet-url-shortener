@@ -28,8 +28,8 @@
                 <span>:</span>
             </div>
             <span class="flex-1">
-                <a href="/{summary.short_url}" target="_blank">
-                    {summary.short_url}
+                <a href="/{summary.shortUrl}" target="_blank">
+                    {summary.shortUrl}
                 </a>
             </span>
         </div>
@@ -40,11 +40,11 @@
             </div>
             <span class="flex-1">
                 <a
-                    href={summary.long_url}
+                    href={summary.longUrl}
                     target="_blank"
-                    title={summary.long_url}
+                    title={summary.longUrl}
                 >
-                    {summary.long_url}
+                    {summary.longUrl}
                 </a>
             </span>
         </div>

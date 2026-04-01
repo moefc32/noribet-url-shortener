@@ -8,13 +8,13 @@ import isValidShortURL from '$lib/isValidShortURL';
 export async function GET({ url }) {
     const page = url.searchParams.get('page') || 1;
     const search = url.searchParams.get('s');
-    const short_url = url.searchParams.get('short_url');
+    const shortUrl = url.searchParams.get('short_url');
 
     try {
         const offset = (page - 1) * 10;
         const result = search
             ? await model.searchData(search, 10, offset)
-            : await model.getData(short_url, 10, offset);
+            : await model.getData(shortUrl, 10, offset);
 
         return json({
             application: VITE_APP_NAME,
@@ -37,11 +37,11 @@ export async function GET({ url }) {
 
 export async function POST({ request }) {
     const {
-        short_url = '',
-        long_url = '',
+        shortUrl = '',
+        longUrl = '',
     } = await request.json() || {};
 
-    if (!isValidShortURL(short_url)) {
+    if (!isValidShortURL(shortUrl)) {
         return json({
             application: VITE_APP_NAME,
             message: 'Invalid short URL!',
@@ -50,7 +50,7 @@ export async function POST({ request }) {
         });
     }
 
-    if (!long_url) {
+    if (!longUrl) {
         return json({
             application: VITE_APP_NAME,
             message: 'Destination URL must be provided!',
@@ -63,8 +63,8 @@ export async function POST({ request }) {
         const cuid = cuid2({ length: 8 })();
 
         const result = await model.createData({
-            short_url: short_url ? trimText(short_url) : cuid,
-            long_url: trimText(long_url)
+            shortUrl: shortUrl ? trimText(shortUrl) : cuid,
+            longUrl: trimText(longUrl)
         });
 
         return json({
@@ -87,11 +87,11 @@ export async function POST({ request }) {
 export async function PATCH({ url, request }) {
     const id = url.searchParams.get('id');
     const {
-        short_url = '',
-        long_url = '',
+        shortUrl = '',
+        longUrl = '',
     } = await request.json() || {};
 
-    if (!isValidShortURL(short_url)) {
+    if (!isValidShortURL(shortUrl)) {
         return json({
             application: VITE_APP_NAME,
             message: 'Invalid short URL!',
@@ -102,8 +102,8 @@ export async function PATCH({ url, request }) {
 
     try {
         const result = await model.editData({
-            short_url: trimText(short_url),
-            long_url: trimText(long_url)
+            shortUrl: trimText(shortUrl),
+            longUrl: trimText(longUrl)
         }, id);
 
         return json({

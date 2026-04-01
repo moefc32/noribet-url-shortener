@@ -7,7 +7,7 @@
 
     export let data;
 
-    let { short_url, contents } = data?.contents;
+    let { shortUrl, contents } = data?.contents;
 
     async function reloadHistoryList(page) {
         try {
@@ -15,7 +15,7 @@
                 .get('/api/url', {
                     searchParams: {
                         page,
-                        short_url,
+                        short_url: shortUrl,
                     },
                 })
                 .json();
@@ -30,5 +30,5 @@
 <main class="container flex flex-1 flex-col gap-6 mx-auto p-6">
     <Header />
     <Summary {contents} />
-    <TableHistory {short_url} {contents} {reloadHistoryList} />
+    <TableHistory {shortUrl} {contents} {reloadHistoryList} />
 </main>

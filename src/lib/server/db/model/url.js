@@ -10,21 +10,21 @@ export default {
             const result = await db
                 .select({
                     id: Urls.id,
-                    short_url: Urls.short_url,
-                    long_url: Urls.long_url,
-                    clicks: sql`COUNT(${Histories.url_id})`,
+                    shortUrl: Urls.shortUrl,
+                    longUrl: Urls.longUrl,
+                    clicks: sql`COUNT(${Histories.urlId})`,
                     timestamp: Urls.timestamp,
                 })
                 .from(Urls)
-                .leftJoin(Histories, eq(Urls.id, Histories.url_id))
+                .leftJoin(Histories, eq(Urls.id, Histories.urlId))
                 .where(
-                    sql`LOWER(${Urls.short_url}) LIKE LOWER(${search})
-                        OR LOWER(${Urls.long_url}) LIKE LOWER(${search})`
+                    sql`LOWER(${Urls.shortUrl}) LIKE LOWER(${search})
+                        OR LOWER(${Urls.longUrl}) LIKE LOWER(${search})`
                 )
                 .groupBy(
                     Urls.id,
-                    Urls.short_url,
-                    Urls.long_url,
+                    Urls.shortUrl,
+                    Urls.longUrl,
                     Urls.timestamp
                 )
                 .orderBy(desc(sql`COALESCE(${Histories.timestamp}, 0)`))
@@ -37,14 +37,14 @@ export default {
             throw new Error('Error when getting data!');
         }
     },
-    validateShortUrl: async (short_url) => {
-        if (!short_url) return [];
+    validateShortUrl: async (shortUrl) => {
+        if (!shortUrl) return [];
 
         try {
             const result = await db
-                .select({ short_url: Urls.short_url })
+                .select({ shortUrl: Urls.shortUrl })
                 .from(Urls)
-                .where(eq(Urls.short_url, short_url))
+                .where(eq(Urls.shortUrl, shortUrl))
                 .limit(1);
 
             return result;
@@ -60,14 +60,14 @@ export default {
             const result = await db
                 .select({
                     id: Urls.id,
-                    long_url: Urls.long_url,
+                    longUrl: Urls.longUrl,
                 })
                 .from(Urls)
-                .where(eq(Urls.short_url, data.short_url));
+                .where(eq(Urls.shortUrl, data.shortUrl));
 
             if (result?.length) {
                 await db.insert(Histories).values({
-                    url_id: result[0].id,
+                    urlId: result[0].id,
                     ref: data.ref,
                     agent: data.agent,
                     timestamp,
@@ -80,23 +80,23 @@ export default {
             throw new Error('Error when getting data!');
         }
     },
-    getData: async (short_url, limit = 10, offset = 0) => {
+    getData: async (shortUrl, limit = 10, offset = 0) => {
         try {
-            const result = short_url
+            const result = shortUrl
                 ? await db
                     .select({
                         id: Urls.id,
-                        short_url: Urls.short_url,
-                        long_url: Urls.long_url,
-                        clicks: sql`COUNT(${Histories.url_id}) OVER()`,
+                        shortUrl: Urls.shortUrl,
+                        longUrl: Urls.longUrl,
+                        clicks: sql`COUNT(${Histories.urlId}) OVER()`,
                         timestamp: Urls.timestamp,
                         ref: Histories.ref,
                         agent: Histories.agent,
                         history_timestamp: Histories.timestamp,
                     })
                     .from(Urls)
-                    .leftJoin(Histories, eq(Urls.id, Histories.url_id))
-                    .where(eq(Urls.short_url, short_url))
+                    .leftJoin(Histories, eq(Urls.id, Histories.urlId))
+                    .where(eq(Urls.shortUrl, shortUrl))
                     .orderBy(desc(sql`COALESCE(${Histories.timestamp}, 0)`))
                     .limit(limit)
                     .offset(offset)
@@ -104,17 +104,17 @@ export default {
                     .select({
                         urls: sql`COUNT(${Urls.id}) OVER()`,
                         id: Urls.id,
-                        short_url: Urls.short_url,
-                        long_url: Urls.long_url,
-                        clicks: sql`COUNT(${Histories.url_id})`,
+                        shortUrl: Urls.shortUrl,
+                        longUrl: Urls.longUrl,
+                        clicks: sql`COUNT(${Histories.urlId})`,
                         timestamp: Urls.timestamp,
                     })
                     .from(Urls)
-                    .leftJoin(Histories, eq(Urls.id, Histories.url_id))
+                    .leftJoin(Histories, eq(Urls.id, Histories.urlId))
                     .groupBy(
                         Urls.id,
-                        Urls.short_url,
-                        Urls.long_url,
+                        Urls.shortUrl,
+                        Urls.longUrl,
                         Urls.timestamp
                     )
                     .orderBy(desc(Urls.timestamp))
@@ -133,16 +133,16 @@ export default {
 
             const result = await db.insert(Urls)
                 .values({
-                    short_url: data.short_url,
-                    long_url: data.long_url,
+                    shortUrl: data.shortUrl,
+                    longUrl: data.longUrl,
                     timestamp,
                 }).returning();
 
 
             return {
                 column: {
-                    short_url: data.short_url,
-                    long_url: data.long_url,
+                    shortUrl: data.shortUrl,
+                    longUrl: data.longUrl,
                     timestamp,
                 },
                 ...result,
@@ -156,8 +156,8 @@ export default {
         try {
             const result = await db.update(Urls)
                 .set({
-                    short_url: data.short_url ?? undefined,
-                    long_url: data.long_url ?? undefined,
+                    shortUrl: data.shortUrl ?? undefined,
+                    longUrl: data.longUrl ?? undefined,
                 })
                 .where(eq(Urls.id, id))
                 .returning();
@@ -165,8 +165,8 @@ export default {
             return {
                 column: {
                     id,
-                    short_url: data.short_url,
-                    long_url: data.long_url,
+                    shortUrl: data.shortUrl,
+                    longUrl: data.longUrl,
                 },
                 ...result,
             };

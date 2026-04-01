@@ -11,15 +11,15 @@ export const Users = sqliteTable('Users', {
 export const Urls = sqliteTable('Urls', {
 	id: text('id').primaryKey()
 		.$defaultFn(() => sql`lower(hex(randomblob(16)))`),
-	short_url: text('short_url').notNull().unique(),
-	long_url: text('long_url').notNull(),
+	shortUrl: text('short_url').notNull().unique(),
+	longUrl: text('long_url').notNull(),
 	timestamp: integer('timestamp').notNull(),
 });
 
 export const Histories = sqliteTable('Histories', {
 	id: text('id').primaryKey()
 		.$defaultFn(() => sql`lower(hex(randomblob(16)))`),
-	url_id: text('url_id').notNull()
+	urlId: text('url_id').notNull()
 		.references(() => Urls.id, { onDelete: 'cascade' }),
 	ref: text('ref'),
 	agent: text('agent'),

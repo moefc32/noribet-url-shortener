@@ -19,8 +19,8 @@
 
     let formData = {
         id: '',
-        short_url: '',
-        long_url: '',
+        shortUrl: '',
+        longUrl: '',
     };
     let searchTimeout;
     let currentPage = 1;
@@ -56,8 +56,8 @@
     function openEditModal(data) {
         url_update.showModal();
         formData.id = data.id;
-        formData.short_url = data.short_url;
-        formData.long_url = data.long_url;
+        formData.shortUrl = data.shortUrl;
+        formData.longUrl = data.longUrl;
     }
 
     function openDeleteModal(id) {
@@ -137,21 +137,21 @@
                     <tr>
                         <td>
                             <a
-                                href="/{item.short_url}"
+                                href="/{item.shortUrl}"
                                 target="_blank"
                                 class="link link-hover"
                             >
-                                {item.short_url}
+                                {item.shortUrl}
                             </a>
                         </td>
                         <td>
                             <a
-                                href={item.long_url}
+                                href={item.longUrl}
                                 target="_blank"
-                                title={item.long_url}
+                                title={item.longUrl}
                                 class="link link-hover"
                             >
-                                {item.long_url}
+                                {item.longUrl}
                             </a>
                         </td>
                         <td>{item.clicks}</td>
@@ -165,7 +165,7 @@
                             <div class="flex gap-1">
                                 <button
                                     class="btn btn-sm btn-info"
-                                    on:click={() => goto(`/${item.short_url}~`)}
+                                    on:click={() => goto(`/${item.shortUrl}~`)}
                                 >
                                     <ChartColumn size={12} /> Stats
                                 </button>
@@ -219,7 +219,7 @@
                 type="text"
                 class="input input-bordered w-full"
                 placeholder="New destination URL"
-                bind:value={formData.long_url}
+                bind:value={formData.longUrl}
                 on:keydown={handleKeydown}
             />
 
@@ -227,7 +227,7 @@
                 type="text"
                 class="input input-bordered w-full"
                 placeholder="New short URL"
-                bind:value={formData.short_url}
+                bind:value={formData.shortUrl}
                 on:keydown={handleKeydown}
             />
         </div>
@@ -236,7 +236,7 @@
                 <button class="btn">Cancel</button>
                 <button
                     class="btn btn-success"
-                    disabled={!formData.long_url || !formData.short_url}
+                    disabled={!formData.longUrl || !formData.shortUrl}
                     on:click={() => editEntry()}
                 >
                     <Check size={14} /> Save

@@ -10,17 +10,17 @@
 
     let siteAddress = null;
     let formData = {
-        long_url: '',
-        short_url: '',
+        longUrl: '',
+        shortUrl: '',
         loading: false,
     };
     let finalResult = {
-        long_url: '',
-        short_url: '',
+        longUrl: '',
+        shortUrl: '',
     };
 
     async function handleKeydown(event) {
-        if (event.key === 'Enter' && formData.long_url) {
+        if (event.key === 'Enter' && formData.longUrl) {
             doShorten();
         }
     }
@@ -35,8 +35,8 @@
 
             await reloadURLList();
 
-            formData.long_url = '';
-            formData.short_url = '';
+            formData.longUrl = '';
+            formData.shortUrl = '';
 
             toast.success('New short URL created successfully.');
         } catch (e) {
@@ -61,7 +61,7 @@
             class="input input-bordered w-full"
             placeholder="Enter destination URL"
             disabled={!siteAddress}
-            bind:value={formData.long_url}
+            bind:value={formData.longUrl}
             on:keydown={handleKeydown}
         />
 
@@ -69,8 +69,8 @@
             <button
                 class="btn btn-success w-48 flex gap-2"
                 disabled={!siteAddress ||
-                    !formData.long_url ||
-                    !isValidShortURL(formData.short_url)}
+                    !formData.longUrl ||
+                    !isValidShortURL(formData.shortUrl)}
                 on:click={() => doShorten()}
             >
                 {#if formData.loading}
@@ -92,7 +92,7 @@
                     class="join-item input input-bordered w-full"
                     placeholder="Enter custom short URL (optional, only alphanumeric)"
                     disabled={!siteAddress}
-                    bind:value={formData.short_url}
+                    bind:value={formData.shortUrl}
                     on:keydown={handleKeydown}
                 />
             </div>
