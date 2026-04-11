@@ -13,7 +13,7 @@ export const Urls = sqliteTable('Urls', {
 		.$defaultFn(() => sql`lower(hex(randomblob(16)))`),
 	shortUrl: text('short_url').notNull().unique(),
 	longUrl: text('long_url').notNull(),
-	timestamp: integer('timestamp').notNull(),
+	timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
 });
 
 export const Histories = sqliteTable('Histories', {
@@ -23,5 +23,5 @@ export const Histories = sqliteTable('Histories', {
 		.references(() => Urls.id, { onDelete: 'cascade' }),
 	ref: text('ref'),
 	agent: text('agent'),
-	timestamp: integer('timestamp').notNull(),
+	timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
 });

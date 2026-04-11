@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import setSchema from '$lib/server/db/init';
 import modelAuth from '$lib/server/db/model/auth';
-import modelURL from '$lib/server/db/model/url';
 import token from '$lib/server/token';
 
 setSchema();

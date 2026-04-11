@@ -55,7 +55,7 @@ export default {
     },
     getLongURL: async (data) => {
         try {
-            const timestamp = Date.now();
+            const timestamp = new Date();
 
             const result = await db
                 .select({
@@ -129,7 +129,7 @@ export default {
     },
     createData: async (data) => {
         try {
-            const timestamp = Date.now();
+            const timestamp = new Date();
 
             const result = await db.insert(Urls)
                 .values({
@@ -137,7 +137,6 @@ export default {
                     longUrl: data.longUrl,
                     timestamp,
                 }).returning();
-
 
             return {
                 column: {
