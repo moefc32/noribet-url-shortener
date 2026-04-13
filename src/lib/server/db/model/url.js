@@ -131,21 +131,14 @@ export default {
         try {
             const timestamp = new Date();
 
-            const result = await db.insert(Urls)
+            const [result] = await db.insert(Urls)
                 .values({
                     shortUrl: data.shortUrl,
                     longUrl: data.longUrl,
                     timestamp,
                 }).returning();
 
-            return {
-                column: {
-                    shortUrl: data.shortUrl,
-                    longUrl: data.longUrl,
-                    timestamp,
-                },
-                ...result,
-            };
+            return result;
         } catch (e) {
             console.error(e);
             throw new Error('Error when creating data!');
@@ -161,14 +154,7 @@ export default {
                 .where(eq(Urls.id, id))
                 .returning();
 
-            return {
-                column: {
-                    id,
-                    shortUrl: data.shortUrl,
-                    longUrl: data.longUrl,
-                },
-                ...result,
-            };
+            return result;
         } catch (e) {
             console.error(e);
             throw new Error('Error when editing data!');

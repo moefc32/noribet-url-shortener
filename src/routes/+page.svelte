@@ -16,14 +16,9 @@
         results: [],
     };
 
-    async function reloadURLList(page = 1) {
+    async function reloadURLList() {
         try {
-            const result = await ky
-                .get('/api/url', {
-                    searchParams: { page },
-                })
-                .json();
-
+            const result = await ky.get('/api/url').json();
             contents = result.data;
         } catch (e) {
             console.error(e);

@@ -32,7 +32,6 @@
             await ky.post('/api/url', {
                 json: formData,
             });
-
             await reloadURLList();
 
             formData.longUrl = '';

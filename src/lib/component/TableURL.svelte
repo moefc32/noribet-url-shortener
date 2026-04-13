@@ -71,9 +71,9 @@
                 searchParams: { id: formData.id },
                 json: formData,
             });
+            await reloadURLList();
 
             toast.success('Data saved successfully.');
-            await reloadURLList();
         } catch (e) {
             console.error(e);
             toast.error('Save data failed, please try again!');
@@ -85,9 +85,9 @@
             await ky.delete('/api/url', {
                 searchParams: { id: formData.id },
             });
+            await reloadURLList();
 
             toast.success('Data deleted successfully.');
-            await reloadURLList();
         } catch (e) {
             console.error(e);
             toast.error('Delete data failed, please try again!');
