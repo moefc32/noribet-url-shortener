@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { db } from '../db/drizzle';
+import db from './drizzle';
 
 export default async function setSchema() {
     await db.run(sql`

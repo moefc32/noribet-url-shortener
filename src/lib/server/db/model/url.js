@@ -1,6 +1,6 @@
 import { eq, like, desc, sql } from 'drizzle-orm';
-import { db } from '../drizzle';
 import { Urls, Histories } from '../schema';
+import db from '../drizzle';
 
 export default {
     searchData: async (keyword, limit = 10, offset = 0) => {

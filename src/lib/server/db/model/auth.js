@@ -1,6 +1,6 @@
 import { eq, or } from 'drizzle-orm';
-import { db } from '../drizzle';
 import { Users } from '../schema';
+import db from '../drizzle';
 
 export default {
     getData: async (data) => {
