@@ -10,17 +10,17 @@
         "prepare": "svelte-kit sync || echo ''"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "^5.5.4",
-        "@sveltejs/kit": "^2.59.1",
+        "@sveltejs/adapter-node": "^5.5.7",
+        "@sveltejs/kit": "^2.70.1",
         "@sveltejs/vite-plugin-svelte": "^5.1.1",
-        "@tailwindcss/vite": "^4.2.4",
-        "daisyui": "^5.5.19",
-        "svelte": "^5.55.5",
-        "tailwindcss": "^4.2.4",
-        "vite": "^6.4.2"
+        "@tailwindcss/vite": "^4.3.3",
+        "daisyui": "^5.7.4",
+        "svelte": "^5.56.8",
+        "tailwindcss": "^4.3.3",
+        "vite": "^6.4.3"
     },
     "dependencies": {
-        "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+        "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
         "@paralleldrive/cuid2": "^2.3.1",
         "bcrypt": "^5.1.1",
         "better-sqlite3": "^11.10.0",
@@ -28,16 +28,7 @@
         "drizzle-orm": "^0.45.2",
         "jsonwebtoken": "^9.0.3",
         "ky": "^1.14.3",
-        "lucide-svelte": "^0.563.0",
         "qrcode": "^1.5.4",
         "svelte-sonner": "^1.1.1"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "@tailwindcss/oxide",
-            "bcrypt",
-            "better-sqlite3",
-            "esbuild"
-        ]
     }
 }
