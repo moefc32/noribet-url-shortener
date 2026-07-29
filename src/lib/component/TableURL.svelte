@@ -7,7 +7,7 @@
         CircleAlert,
         Link,
         Check,
-    } from 'lucide-svelte';
+    } from '@lucide/svelte';
     import { toast } from 'svelte-sonner';
     import ky from 'ky';
     import datePrettier from '$lib/datePrettier';

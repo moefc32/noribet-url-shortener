@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import { Eye, EyeOff, Check } from 'lucide-svelte';
+    import { Eye, EyeOff, Check } from '@lucide/svelte';
     import { toast } from 'svelte-sonner';
     import ky from 'ky';
     import isValidEmail from '$lib/isValidEmail';
