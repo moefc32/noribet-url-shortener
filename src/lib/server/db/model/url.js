@@ -146,7 +146,7 @@ export default {
     },
     editData: async (data, id) => {
         try {
-            const result = await db.update(Urls)
+            const [result] = await db.update(Urls)
                 .set({
                     shortUrl: data.shortUrl ?? undefined,
                     longUrl: data.longUrl ?? undefined,
@@ -157,7 +157,7 @@ export default {
             return result;
         } catch (e) {
             console.error(e);
-            throw new Error('Error when editing data!');
+            throw new Error('Error when updating data!');
         }
     },
     deleteData: async (id) => {

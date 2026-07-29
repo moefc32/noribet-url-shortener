@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { Check } from 'lucide-svelte';
+    import { Check } from '@lucide/svelte';
     import { toast } from 'svelte-sonner';
     import ky from 'ky';
     import isValidShortURL from '$lib/isValidShortURL';

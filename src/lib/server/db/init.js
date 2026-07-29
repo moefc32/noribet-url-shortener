@@ -7,7 +7,7 @@ export default async function setSchema() {
             id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
             email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL
-        )
+        );
     `);
 
     await db.run(sql`
@@ -16,7 +16,7 @@ export default async function setSchema() {
             short_url TEXT NOT NULL UNIQUE,
             long_url TEXT NOT NULL,
             timestamp INTEGER NOT NULL
-        )
+        );
     `);
 
     await db.run(sql`
@@ -27,6 +27,6 @@ export default async function setSchema() {
             agent TEXT,
             timestamp INTEGER NOT NULL,
             FOREIGN KEY (url_id) REFERENCES Urls(id) ON DELETE CASCADE
-        )
+        );
     `);
 }
